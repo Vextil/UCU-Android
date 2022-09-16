@@ -1,0 +1,21 @@
+package uy.edu.ucu.notas
+
+import androidx.room.*
+
+@Dao
+interface NoteDao {
+    @Query("SELECT * FROM note")
+    fun getAll(): List<Note>
+
+    @Query("SELECT * FROM note WHERE id IN (:noteIds)")
+    fun loadAllByIds(noteIds: IntArray): List<Note>
+
+    @Insert
+    fun insertAll(vararg notes: Note)
+
+    @Delete
+    fun delete(note: Note)
+
+    @Update
+    fun update(note: Note)
+}
