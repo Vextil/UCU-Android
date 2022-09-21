@@ -22,6 +22,17 @@ class NotesListActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recycler)
         val db = App.db(applicationContext)
 
+//        for (i in 1..100) {
+//            db.noteDao().insertAll(Note(
+//                title = "Title $i",
+//                body = "Content".repeat(i),
+//                type = NoteType.Note,
+//                createDate = System.currentTimeMillis(),
+//                editDate = System.currentTimeMillis()
+//            ))
+//        }
+
+
         val notes = db.noteDao().getAll()
         val adapter = NotesAdapter(notes.toTypedArray())
 
