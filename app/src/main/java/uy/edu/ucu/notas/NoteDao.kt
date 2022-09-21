@@ -7,8 +7,8 @@ interface NoteDao {
     @Query("SELECT * FROM note")
     fun getAll(): List<Note>
 
-    @Query("SELECT * FROM note WHERE id IN (:noteIds)")
-    fun loadAllByIds(noteIds: IntArray): List<Note>
+    @Query("SELECT * FROM note WHERE id = :noteId LIMIT 1")
+    fun getById(noteId: Int): Note
 
     @Insert
     fun insertAll(vararg notes: Note)
