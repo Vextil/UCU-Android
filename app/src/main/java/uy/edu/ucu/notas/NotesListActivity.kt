@@ -1,21 +1,31 @@
 package uy.edu.ucu.notas
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.os.PersistableBundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_notes_list.*
+import kotlinx.android.synthetic.main.notes_list_item.view.*
+import kotlinx.coroutines.NonDisposableHandle
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import kotlin.random.Random
 
 
-class NotesListActivity : AppCompatActivity() {
-
+class NotesListActivity : AppCompatActivity() , NotesAdapter.onNoteItemClickListener {
     val fab by lazy { findViewById<FloatingActionButton>(R.id.fab) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,10 +33,6 @@ class NotesListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_notes_list)
         val recyclerView = findViewById<RecyclerView>(R.id.recycler)
         val db = App.db(applicationContext)
-
-
-//        db.noteDao().deleteAll()
-//
 //        for (i in 1..100) {
 //            val isList = Random.nextBoolean()
 //            db.noteDao().insertAll(Note(
@@ -38,38 +44,39 @@ class NotesListActivity : AppCompatActivity() {
 //            ))
 //        }
 
-
-        val notes = db.noteDao().getAll()
-        val adapter = NotesAdapter(notes.toTypedArray())
+            val notes = db.noteDao().getAll()
+        val adapter = NotesAdapter(notes.toTypedArray(),this)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-
         fab.setOnClickListener { view ->
             // TODO
             Snackbar.make(view, "Ir a crear nota", Snackbar.LENGTH_LONG)
                 .show()
         }
-    }
+        viewSwitch.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                true ->  recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_delete, menu);
-        return true;
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        if (id == R.id.action_delete) {
-
-            return true
+                false ->  recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+            }
         }
-        return super.onOptionsItemSelected(item)
 
+
+    }
+
+
+    override  fun onItemClick(item : Note, position:Int){
+        val intent = Intent(this, CreateNoteActivity::class.java)
+        intent.putExtra("id",item.id)
+
+        startActivity(intent)
     }
 }
 
-class NotesAdapter(private val dataSet: Array<Note>) :
+
+
+class NotesAdapter(private val dataSet: Array<Note>, var clickListener: onNoteItemClickListener) :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
     /**
@@ -77,13 +84,16 @@ class NotesAdapter(private val dataSet: Array<Note>) :
      * (custom ViewHolder).
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView
-        val body: TextView
 
-        init {
-            // Define click listener for the ViewHolder's View.
-            title = view.findViewById(R.id.title)
-            body = view.findViewById(R.id.body)
+        var title =  view.title
+        var body = view.body
+
+        fun initialize(item : Note,action:onNoteItemClickListener){
+            title.text = item.title
+            body.text = item.body
+            itemView.setOnClickListener{
+                action.onItemClick(item,adapterPosition)
+            }
         }
     }
 
@@ -92,13 +102,14 @@ class NotesAdapter(private val dataSet: Array<Note>) :
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.notes_list_item, viewGroup, false)
-
-        return ViewHolder(view)
+        var viewHolder: ViewHolder = ViewHolder(LayoutInflater.from(viewGroup.context).inflate(R.layout.notes_list_item,
+            viewGroup, false))
+        return viewHolder
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-
+        viewHolder.initialize(dataSet.get(position),clickListener)
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.title.text = dataSet[position].title
@@ -108,4 +119,9 @@ class NotesAdapter(private val dataSet: Array<Note>) :
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
 
+
+
+    interface  onNoteItemClickListener{
+        fun onItemClick(item: Note,position: Int)
+    }
 }
