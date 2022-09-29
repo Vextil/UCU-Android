@@ -24,3 +24,9 @@ enum class NoteType {
     Note,
     List
 }
+
+@Serializable
+data class NoteListItem (
+    val value: String,
+    val checked: Boolean
+)

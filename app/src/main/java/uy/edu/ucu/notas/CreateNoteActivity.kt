@@ -19,6 +19,7 @@ class CreateNoteActivity : AppCompatActivity() {
         note.title?.let { Log.v("Note", it) }
         note.body?.let { Log.v("Note", it) }
         note_title.setText(note.title)
+        note_body.setText(note.body)
         val erase: ImageView = this.findViewById(R.id.note_erase)
         erase.setOnClickListener {
             Toast.makeText(this, "Eliminada", Toast.LENGTH_LONG).show()
