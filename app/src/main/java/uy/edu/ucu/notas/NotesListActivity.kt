@@ -21,6 +21,8 @@ import kotlinx.android.synthetic.main.notes_list_item.view.*
 import kotlin.random.Random
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
+import java.text.DateFormat
+import java.util.*
 
 class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListener {
     val fab by lazy { findViewById<FloatingActionButton>(R.id.fab) }
@@ -30,23 +32,20 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         setContentView(R.layout.activity_notes_list)
         val recyclerView = findViewById<RecyclerView>(R.id.recycler)
         val db = App.db(applicationContext)
-//        for (i in 1..100) {
-//            val isList = Random.nextBoolean()
-//            val list = listOf<NoteListItem>(
-//                NoteListItem("Item 1", Random.nextBoolean()),
-//                NoteListItem("Item 2", Random.nextBoolean()),
-//                NoteListItem("Item 3", Random.nextBoolean()),
-//                NoteListItem("Item 4", Random.nextBoolean()),
-//                NoteListItem("Item 5", Random.nextBoolean()),
-//            )
-//            db.noteDao().insertAll(Note(
-//                title = "Title $i",
-//                body = if (isList) Json.encodeToString(list) else "Content".repeat(i),
-//                type = if (isList) NoteType.List else NoteType.Note,
-//                createDate = System.currentTimeMillis(),
-//                editDate = System.currentTimeMillis()
-//            ))
-//        }
+        for (i in 1..100) {
+            val isList = Random.nextBoolean()
+            val list = mutableListOf<NoteListItem>()
+            for (j in 1..i) {
+                list.add(NoteListItem(value = "Item $j", checked = Random.nextBoolean()))
+            }
+            db.noteDao().insertAll(Note(
+                title = "Title $i",
+                body = if (isList) Json.encodeToString(list) else "Content".repeat(i),
+                type = if (isList) NoteType.List else NoteType.Note,
+                createDate = System.currentTimeMillis(),
+                editDate = System.currentTimeMillis()
+            ))
+        }
 
         val notes = db.noteDao().getAll()
         val adapter = NotesAdapter(notes.toTypedArray(), this)
@@ -84,9 +83,12 @@ class NotesAdapter(private val dataSet: Array<Note>, var clickListener: onNoteIt
         var title: TextView = view.title
         var body: TextView = view.body
         var listBody: LinearLayoutCompat = view.listBody
+        var date: TextView = view.date
 
         fun initialize(item: Note, action: onNoteItemClickListener) {
+            title.text = item.title
             body.text = item.title
+            date.text = DateFormat.getDateInstance().format(item.createDate)
             listBody.removeAllViews()
             if (item.type == NoteType.List) {
                 body.text = null
