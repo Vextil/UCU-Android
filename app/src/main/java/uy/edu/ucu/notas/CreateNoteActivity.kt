@@ -2,6 +2,7 @@ package uy.edu.ucu.notas
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
@@ -25,10 +26,10 @@ class CreateNoteActivity : AppCompatActivity() {
         note.body?.let { Log.v("Note", it) }
         note_title.setText(note.title)
         if (note.type == NoteType.Note) {
-            (note_list_contanier.parent as ViewGroup).removeView(note_list_contanier)
+            list_scroll.visibility = View.GONE
             note_body.setText(note.body)
         } else {
-            (note_body.parent as ViewGroup).removeView(note_body)
+            note_body.visibility = View.GONE
             val list = Json.decodeFromString<List<NoteListItem>>(note.body!!)
             for (item in list) {
                 addListItem(item.checked, item.value)
@@ -57,5 +58,6 @@ class CreateNoteActivity : AppCompatActivity() {
             note_list_contanier.removeView(view)
         }
         note_list_contanier.addView(view)
+        list_scroll.fullScroll(View.FOCUS_DOWN)
     }
 }

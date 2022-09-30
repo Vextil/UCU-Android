@@ -30,6 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/note_title" />
 
     <ScrollView
+        android:id="@+id/list_scroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
