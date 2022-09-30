@@ -58,6 +58,8 @@ class CreateNoteActivity : AppCompatActivity() {
             note_list_contanier.removeView(view)
         }
         note_list_contanier.addView(view)
-        list_scroll.fullScroll(View.FOCUS_DOWN)
+        list_scroll.postDelayed({
+            list_scroll.fullScroll(View.FOCUS_DOWN)
+        }, 300)
     }
 }
