@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Dao
 interface NoteDao {
-    @Query("SELECT * FROM note")
+    @Query("SELECT * FROM note order by editDate desc")
     fun getAll(): List<Note>
 
     @Query("SELECT * FROM note WHERE id = :noteId LIMIT 1")

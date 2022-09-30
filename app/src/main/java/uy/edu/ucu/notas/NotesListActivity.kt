@@ -25,7 +25,7 @@ import java.text.DateFormat
 import java.util.*
 
 class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListener {
-    val fab by lazy { findViewById<FloatingActionButton>(R.id.fab) }
+    val fab: FloatingActionButton by lazy { findViewById<FloatingActionButton>(R.id.fab) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,8 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         recyclerView.adapter = adapter
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         fab.setOnClickListener { _ ->
-            val intent = Intent(this, CreateNoteActivity::class.java).apply {  }
+            val intent = Intent(this, CreateNoteActivity::class.java)
+            intent.putExtra("id", 0)
             startActivity(intent)
         }
         viewSwitch.setOnCheckedChangeListener { _, checkedId ->
