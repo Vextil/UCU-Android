@@ -10,11 +10,11 @@ import java.util.*
 @Entity
 @Serializable
 data class Note(
-    val title: String?,
-    val body: String?,
+    var title: String?,
+    var body: String?,
     val type: NoteType,
     val createDate: Long,
-    val editDate: Long?
+    var editDate: Long?
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
