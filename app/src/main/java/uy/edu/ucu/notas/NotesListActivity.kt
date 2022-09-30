@@ -66,6 +66,15 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             }
         }
     }
+    override fun onResume() {
+        super.onResume()
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler)
+        val db = App.db(applicationContext)
+        val notes = db.noteDao().getAll()
+        val adapter = NotesAdapter(notes.toTypedArray(), this)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+    }
 
     override fun onItemClick(item: Note, position: Int) {
         val intent = Intent(this, CreateNoteActivity::class.java)
