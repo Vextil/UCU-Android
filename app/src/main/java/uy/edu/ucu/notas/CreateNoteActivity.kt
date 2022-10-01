@@ -2,28 +2,31 @@ package uy.edu.ucu.notas
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import dev.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog
 import kotlinx.android.synthetic.main.activity_create_note.*
 import kotlinx.android.synthetic.main.note_detail_list_item.view.*
+import kotlinx.coroutines.launch
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 
 class CreateNoteActivity : AppCompatActivity() {
-    var initial_title = ""
-    var initial_body = ""
-    val isList: Boolean by lazy { intent.getBooleanExtra("isList", false) }
+    private var initial_title = ""
+    private var initial_body = ""
+    private val db by lazy { App.db(applicationContext) }
+    private val isList: Boolean by lazy { intent.getBooleanExtra("isList", false) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_note)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val id = intent.getIntExtra("id", 0)
-        val isList = intent.getBooleanExtra("isList", false)
-        val db = App.db(applicationContext)
+
+
         if (id != 0){
 
             val note = db.noteDao().getById(id)
@@ -43,27 +46,18 @@ class CreateNoteActivity : AppCompatActivity() {
                     addListItem(item.checked, item.value)
                 }
             }
-            val erase: ImageView = this.findViewById(R.id.note_erase)
-            erase.setOnClickListener {
-                Toast.makeText(this, "Eliminada", Toast.LENGTH_LONG).show()
-                db.noteDao().delete(note)
-                finish()
-                // retornar a la pagina ppal
+
+        }else{
+            if (isList) {
+                note_body.visibility = View.GONE
+            } else {
+                list_scroll.visibility = View.GONE
 
             }
-        }else{
-            val erase: ImageView = this.findViewById(R.id.note_erase)
-            erase.visibility = View.GONE
         }
-
-
-
-
         add_item_to_list_button.setOnClickListener {
             addListItem()
         }
-
-
 
     }
 
@@ -83,62 +77,96 @@ class CreateNoteActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                val db = App.db(applicationContext)
                 val id = intent.getIntExtra("id", 0)
-                if (id != 0) {
-                    val note = db.noteDao().getById(id)
-                    val new_title = note_title.text.toString()
-                    val new_body = if (note.type == NoteType.Note) {
-                        note_body.text.toString()
-                    } else {
-                        val list = mutableListOf<NoteListItem>()
-                        for (i in 0 until note_list_contanier.childCount) {
-                            val view = note_list_contanier.getChildAt(i)
-                            list.add(
-                                NoteListItem(
-                                    view.text.text.toString(),
-                                    view.checkbox.isChecked
-                                )
-                            )
-                        }
-                        Json.encodeToString(list)
-                    }
-                    Log.v("NoteTitle", new_title)
-                    Log.v("NoteBody", new_body)
-                    Log.v("NoteType", isList.toString())
-                    if (initial_title == new_title && initial_body == new_body) {
-                        finish()
-                        return true
-
-                    } else if ((isList && new_title == "" && new_body == "[]") || (!isList && new_title == "" && new_body == "")) {
-                        db.noteDao().delete(note)
-                        finish()
-                        return true
-                    } else {
-                        note.title = new_title
-                        note.body = new_body
-                        note.lastModifiedDate = System.currentTimeMillis()
-                        db.noteDao().update(note)
-                        finish()
-                        return true
-                    }
-
+                val new_title = note_title.text.toString()
+                val new_body = if (!isList) {
+                    note_body.text.toString()
                 } else {
-
-                    if ((isList && note_title.text.toString() == "" && note_body.text.toString() == "[]") || (!isList && note_title.text.toString() == "" && note_body.text.toString() == "")) {
-                        val note = Note(
-                            title = note_title.text.toString(),
-                            body = note_body.text.toString(),
-                            type = NoteType.Note,
-                            lastModifiedDate = System.currentTimeMillis()
+                    val list = mutableListOf<NoteListItem>()
+                    for (i in 0 until note_list_contanier.childCount) {
+                        val view = note_list_contanier.getChildAt(i)
+                        list.add(
+                            NoteListItem(
+                                view.text.text.toString(),
+                                view.checkbox.isChecked
+                            )
                         )
-                        db.noteDao().insertAll(note)
                     }
-                    finish()
-                    return true
+                    Json.encodeToString(list)
                 }
+                exitCreation(new_title,new_body, if (id != 0) db.noteDao().getById(id) else null)
+                finish()
+                return true
+            }
+
+            R.id.action_delete -> {
+                lifecycleScope.launch {
+                    val id = intent.getIntExtra("id", 0)
+                    if (id != 0) {
+                        val note = db.noteDao().getById(id)
+                        onDeleteNote(note)
+                    }
+                }
+                return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_show_list, menu)
+        menu.findItem(R.id.show_list).isVisible = false
+        menu.findItem(R.id.show_grid).isVisible = false
+        menu.findItem(R.id.action_delete).isVisible = intent.getIntExtra("id", 0) != 0
+        return true
+    }
+
+    private fun onDeleteNote(note: Note) {
+        val mBottomSheetDialog = BottomSheetMaterialDialog.Builder(this)
+            .setTitle("¿Borrar nota?")
+            .setMessage("¿Estás seguro que querés borrar esta nota?")
+            .setCancelable(false)
+            .setPositiveButton(
+                "Borrar", R.drawable.ic_delete_24
+            ) { dialogInterface, _ ->
+                db.noteDao().delete(note)
+                Toast.makeText(applicationContext, "Borrado!", Toast.LENGTH_SHORT).show()
+                dialogInterface.dismiss()
+                finish()
+            }
+            .setNegativeButton(
+                "Cancelar", R.drawable.ic_baseline_close_24
+            ) { dialogInterface, _ ->
+                dialogInterface.dismiss()
+            }
+            .build()
+
+        mBottomSheetDialog.show()
+    }
+
+    private fun exitCreation(new_title: String, new_body: String, note: Note?) {
+        if(note != null){
+            if ((isList && new_title.isBlank() && new_body == "[]") ||
+                (!isList && new_title.isBlank() && new_body.isBlank())) {
+                db.noteDao().delete(note)
+            } else if (new_title.trim() != initial_title.trim() || new_body.trim() != initial_body.trim()) {
+                note.title = new_title
+                note.body = new_body
+                note.lastModifiedDate = System.currentTimeMillis()
+                db.noteDao().update(note)
+            }else{
+                return
+            }
+        }else{
+            if (!((isList && new_title.isBlank() && new_body == "[]") ||
+                        (!isList && new_title.isBlank() && new_body.isBlank()))){
+                    val note = Note(
+                    title = note_title.text.toString(),
+                    body = note_body.text.toString(),
+                    type = NoteType.Note,
+                    lastModifiedDate = System.currentTimeMillis()
+                )
+                db.noteDao().insertAll(note)
+            }
+        }
     }
 }

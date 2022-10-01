@@ -48,9 +48,26 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         recycler.adapter = adapter
         recycler.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         fab.setOnClickListener { _ ->
+            val intent = Intent(this, CreateNoteActivity::class.java)
+            intent.putExtra("id", 0)
+            intent.putExtra("isList", NoteType.Note == NoteType.List)
 
             startActivity(intent)
         }
+
+        search_view.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val notes = db.noteDao().getByFilter(("%$query%") ?: "",("%\"value\":\"$query%") ?: "")
+                (recycler.adapter as NotesAdapter).replaceData(notes.toTypedArray())
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val notes = db.noteDao().getByFilter(("%$newText%") ?: "",("%\"value\":\"$newText%") ?: "")
+                (recycler.adapter as NotesAdapter).replaceData(notes.toTypedArray())
+                return true
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -148,6 +165,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
     private fun refresh() {
         lifecycleScope.launch {
             val notes = db.noteDao().getAll()
+            search_view.setQuery("", false)
             (recycler.adapter as NotesAdapter).replaceData(notes.toTypedArray())
         }
     }

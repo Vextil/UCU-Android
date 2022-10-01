@@ -7,6 +7,9 @@ interface NoteDao {
     @Query("SELECT * FROM note order by lastModifiedDate desc")
     fun getAll(): List<Note>
 
+    @Query("SELECT * FROM note WHERE title LIKE :filter OR ((body LIKE :filter and type = 'Note') OR (body LIKE :json and type = 'List')) order by lastModifiedDate desc")
+    fun getByFilter(filter : String,json : String): List<Note>
+
     @Query("SELECT COUNT(1) FROM note")
     suspend fun getCount(): Int
 

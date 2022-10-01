@@ -2,6 +2,7 @@ package uy.edu.ucu.notas
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
 import kotlinx.serialization.Serializable
 import java.time.Instant
 import java.time.LocalDateTime

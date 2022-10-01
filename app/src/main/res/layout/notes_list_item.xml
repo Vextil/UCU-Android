@@ -8,8 +8,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/note_yellow"
+        android:background="@drawable/rounded_corner"
+        android:backgroundTint="@color/note_yellow"
         android:layout_margin="5dp"
+
         android:padding="10dp"
         android:elevation="2dp">
 
