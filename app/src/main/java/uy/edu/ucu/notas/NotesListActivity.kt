@@ -19,6 +19,8 @@ import kotlin.random.Random
 
 class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListener {
 
+    private val db by lazy { App.db(applicationContext) }
+    private var showGrid = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
