@@ -19,8 +19,6 @@ import kotlin.random.Random
 
 class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListener {
 
-    val db by lazy { App.db(applicationContext) }
-    var showGrid = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +47,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         recycler.adapter = adapter
         recycler.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         fab.setOnClickListener { _ ->
-            val intent = Intent(this, CreateNoteActivity::class.java).apply { }
+
             startActivity(intent)
         }
     }

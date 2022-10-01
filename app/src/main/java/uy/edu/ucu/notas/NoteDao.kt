@@ -4,11 +4,11 @@ import androidx.room.*
 
 @Dao
 interface NoteDao {
-    @Query("SELECT * FROM note")
+    @Query("SELECT * FROM note order by editDate desc")
     fun getAll(): List<Note>
 
     @Query("SELECT COUNT(1) FROM note")
-    fun getCount(): Int
+    suspend fun getCount(): Int
 
     @Query("SELECT * FROM note WHERE id = :noteId LIMIT 1")
     fun getById(noteId: Int): Note

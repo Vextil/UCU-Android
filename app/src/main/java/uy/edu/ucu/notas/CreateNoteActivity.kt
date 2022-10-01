@@ -20,35 +20,44 @@ class CreateNoteActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_note)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val id = intent.getIntExtra("id", 0)
-
         val db = App.db(applicationContext)
-        val note = db.noteDao().getById(id)
-        note.title?.let { Log.v("Note", it) }
-        note.body?.let { Log.v("Note", it) }
-        note_title.setText(note.title)
-        if (note.type == NoteType.Note) {
-            list_scroll.visibility = View.GONE
-            note_body.setText(note.body)
-        } else {
-            note_body.visibility = View.GONE
-            val list = Json.decodeFromString<List<NoteListItem>>(note.body!!)
-            for (item in list) {
-                addListItem(item.checked, item.value)
+        if (id != 0){
+
+            val note = db.noteDao().getById(id)
+            note.title?.let { Log.v("Note", it) }
+            note.body?.let { Log.v("Note", it) }
+            note_title.setText(note.title)
+            if (note.type == NoteType.Note) {
+                list_scroll.visibility = View.GONE
+                note_body.setText(note.body)
+            } else {
+                note_body.visibility = View.GONE
+                val list = Json.decodeFromString<List<NoteListItem>>(note.body!!)
+                for (item in list) {
+                    addListItem(item.checked, item.value)
+                }
             }
+            val erase: ImageView = this.findViewById(R.id.note_erase)
+            erase.setOnClickListener {
+                Toast.makeText(this, "Eliminada", Toast.LENGTH_LONG).show()
+                db.noteDao().delete(note)
+                finish()
+                // retornar a la pagina ppal
+
+            }
+        }else{
+            val erase: ImageView = this.findViewById(R.id.note_erase)
+            erase.visibility = View.GONE
         }
+
+
+
 
         add_item_to_list_button.setOnClickListener {
             addListItem()
         }
 
-        val erase: ImageView = this.findViewById(R.id.note_erase)
-        erase.setOnClickListener {
-            Toast.makeText(this, "Eliminada", Toast.LENGTH_LONG).show()
-            db.noteDao().delete(note)
-            finish()
-            // retornar a la pagina ppal
 
-        }
 
     }
 
@@ -70,11 +79,22 @@ class CreateNoteActivity : AppCompatActivity() {
             android.R.id.home -> {
                 val db = App.db(applicationContext)
                 val id = intent.getIntExtra("id", 0)
-                val note = db.noteDao().getById(id)
-                note.title = note_title.text.toString()
-                note.body = note_body.text.toString()
-                note.editDate = System.currentTimeMillis()
-                db.noteDao().update(note)
+                if (id != 0) {
+                    val note = db.noteDao().getById(id)
+                    note.title = note_title.text.toString()
+                    note.body = note_body.text.toString()
+                    note.editDate = System.currentTimeMillis()
+                    db.noteDao().update(note)
+                }else{
+                    val note = Note(
+                        title = note_title.text.toString(),
+                        body = note_body.text.toString(),
+                        type = NoteType.Note,
+                        createDate = System.currentTimeMillis(),
+                        editDate = System.currentTimeMillis()
+                    )
+                    db.noteDao().insertAll(note)
+                }
                 finish()
                 return true
             }
