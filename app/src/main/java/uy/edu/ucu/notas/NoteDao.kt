@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Dao
 interface NoteDao {
-    @Query("SELECT * FROM note order by editDate desc")
+    @Query("SELECT * FROM note order by lastModifiedDate desc")
     fun getAll(): List<Note>
 
     @Query("SELECT COUNT(1) FROM note")

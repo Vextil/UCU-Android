@@ -26,7 +26,7 @@ class NotesAdapter(private var dataSet: Array<Note>, var clickListener: onNoteIt
         fun initialize(item: Note, action: onNoteItemClickListener) {
             title.text = item.title
             body.text = item.title
-            date.text = DateFormat.getDateInstance().format(item.createDate)
+            date.text = DateFormat.getDateInstance().format(item.lastModifiedDate)
             listBody.removeAllViews()
             if (item.type == NoteType.List) {
                 body.text = null

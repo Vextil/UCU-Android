@@ -13,8 +13,7 @@ data class Note(
     var title: String?,
     var body: String?,
     val type: NoteType,
-    val createDate: Long,
-    var editDate: Long?
+    var lastModifiedDate: Long
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

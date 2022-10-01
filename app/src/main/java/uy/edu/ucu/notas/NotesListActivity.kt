@@ -26,7 +26,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_list)
         val db = App.db(applicationContext)
-        for (i in 1..100) {
+        for (i in 1..20) {
             val isList = Random.nextBoolean()
             val list = mutableListOf<NoteListItem>()
             for (j in 1..i) {
@@ -37,8 +37,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
                     title = "Title $i",
                     body = if (isList) Json.encodeToString(list) else "Content".repeat(i),
                     type = if (isList) NoteType.List else NoteType.Note,
-                    createDate = System.currentTimeMillis(),
-                    editDate = System.currentTimeMillis()
+                    lastModifiedDate = System.currentTimeMillis(),
                 )
             )
         }
@@ -95,6 +94,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
     override fun onItemClick(item: Note, position: Int) {
         val intent = Intent(this, CreateNoteActivity::class.java)
         intent.putExtra("id", item.id)
+        intent.putExtra("isList", item.type == NoteType.List)
         startActivity(intent)
     }
 
