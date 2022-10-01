@@ -43,34 +43,44 @@
             android:textSize="40sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:layout_margin="20dp"
-            android:background="@drawable/rounded_corner"
-            android:hint="Email"
+            android:layout_margin="20sp"
             android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:textColor="#fff"
-            android:textColorHint="#eee"
-            android:textSize="17sp" />
+            android:paddingEnd="10dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Email"
+                android:textColor="#fff"
+                android:textColorHint="#eee"
+                android:textSize="17sp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/rounded_corner"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:hint="Password"
             android:inputType="textPassword"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+
             android:textColor="#fff"
             android:textColorHint="#eee"
             android:textSize="17sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/biometricSwitch"
@@ -92,49 +102,9 @@
             android:text="Acceder"
             android:textColor="#777" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Forgot Password?"
-            android:textColor="#fff"
-            android:visibility="gone" />
-
     </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="Or Signup with" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/google" />
-        </LinearLayout>
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/themeSwitch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Modo oscuro" />
-
-    </LinearLayout>
 
 </RelativeLayout>
