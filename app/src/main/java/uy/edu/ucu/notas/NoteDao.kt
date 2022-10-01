@@ -7,6 +7,9 @@ interface NoteDao {
     @Query("SELECT * FROM note")
     fun getAll(): List<Note>
 
+    @Query("SELECT COUNT(1) FROM note")
+    fun getCount(): Int
+
     @Query("SELECT * FROM note WHERE id = :noteId LIMIT 1")
     fun getById(noteId: Int): Note
 
@@ -15,6 +18,9 @@ interface NoteDao {
 
     @Delete
     fun delete(note: Note)
+
+    @Query("DELETE FROM note")
+    suspend fun deleteAll()
 
     @Update
     fun update(note: Note)

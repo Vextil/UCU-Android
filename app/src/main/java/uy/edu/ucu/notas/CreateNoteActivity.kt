@@ -52,7 +52,6 @@ class CreateNoteActivity : AppCompatActivity() {
 
     }
 
-
     private fun addListItem(checked: Boolean = false, value: String = "") {
         val view = layoutInflater.inflate(R.layout.note_detail_list_item, null)
         view.checkbox.isChecked = checked
@@ -65,6 +64,7 @@ class CreateNoteActivity : AppCompatActivity() {
             list_scroll.fullScroll(View.FOCUS_DOWN)
         }, 300)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
