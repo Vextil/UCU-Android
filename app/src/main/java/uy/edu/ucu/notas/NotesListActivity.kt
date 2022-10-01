@@ -32,12 +32,20 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             for (j in 1..i) {
                 list.add(NoteListItem(value = "Item $j", checked = Random.nextBoolean()))
             }
+            val randomColor = when (Random.nextInt(0, 5)) {
+                1 -> R.color.note_orange
+                2 -> R.color.note_blue
+                3 -> R.color.note_green
+                4 -> R.color.note_pink
+                else -> R.color.note_yellow
+            }
             db.noteDao().insertAll(
                 Note(
                     title = "Title $i",
                     body = if (isList) Json.encodeToString(list) else "Content".repeat(i),
                     type = if (isList) NoteType.List else NoteType.Note,
                     lastModifiedDate = System.currentTimeMillis(),
+                    color = randomColor
                 )
             )
         }

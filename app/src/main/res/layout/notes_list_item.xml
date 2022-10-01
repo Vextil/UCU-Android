@@ -6,12 +6,12 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corner"
         android:backgroundTint="@color/note_yellow"
         android:layout_margin="5dp"
-
         android:padding="10dp"
         android:elevation="2dp">
 
@@ -22,7 +22,8 @@
             android:text="Title"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:paddingBottom="5dp"/>
 
         <FrameLayout
             android:layout_width="match_parent"

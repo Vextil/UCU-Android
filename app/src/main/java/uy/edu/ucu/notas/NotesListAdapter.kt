@@ -1,12 +1,16 @@
 package uy.edu.ucu.notas
 
+import android.content.res.ColorStateList
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.notes_list_item.view.*
 import kotlinx.serialization.decodeFromString
@@ -18,18 +22,20 @@ class NotesAdapter(private var dataSet: Array<Note>, var clickListener: onNoteIt
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        var title: TextView = view.title
-        var body: TextView = view.body
-        var listBody: LinearLayoutCompat = view.listBody
-        var date: TextView = view.date
-
         fun initialize(item: Note, action: onNoteItemClickListener) {
-            title.text = item.title
-            body.text = item.title
-            date.text = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(item.lastModifiedDate)
-            listBody.removeAllViews()
+            itemView.title.text = item.title
+            itemView.body.text = item.title
+            itemView.date.text = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+                .format(item.lastModifiedDate)
+            itemView.container.background.setTint(
+                ContextCompat.getColor(
+                    itemView.context,
+                    item.color
+                )
+            )
+            itemView.listBody.removeAllViews()
             if (item.type == NoteType.List) {
-                body.text = null
+                itemView.body.text = null
                 var list: List<NoteListItem> = listOf()
                 try {
                     list = Json.decodeFromString(item.body ?: "[]")
@@ -37,14 +43,24 @@ class NotesAdapter(private var dataSet: Array<Note>, var clickListener: onNoteIt
                     Log.e("NotesAdapter", "Error parsing list", e)
                 }
                 for (i in list) {
-                    val view = CheckBox(listBody.context)
+                    val view = AppCompatCheckBox(itemView.listBody.context)
+                    view.buttonTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            itemView.context,
+                            R.color.checkbox_transparent
+                        )
+                    )
+                    view.background = null
                     view.isClickable = false
+                    view.isFocusable = false
+                    view.minimumHeight = 0
+                    view.minimumWidth = 0
                     view.text = i.value
                     view.isChecked = i.checked
-                    listBody.addView(view)
+                    itemView.listBody.addView(view)
                 }
             } else {
-                body.text = item.body
+                itemView.body.text = item.body
             }
             itemView.setOnClickListener {
                 action.onItemClick(item, adapterPosition)
