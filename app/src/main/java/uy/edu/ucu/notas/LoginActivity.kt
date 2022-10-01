@@ -32,13 +32,6 @@ class LoginActivity : AppCompatActivity() {
             setupSignUp()
         }
 
-        themeSwitch.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }
-
     }
 
     private fun setupLogin() {
