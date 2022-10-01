@@ -89,9 +89,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch {
-            refresh()
-        }
+        refresh()
     }
 
     override fun onItemClick(item: Note, position: Int) {
@@ -147,8 +145,10 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         mBottomSheetDialog.show()
     }
 
-    private suspend fun refresh() {
-        val notes = db.noteDao().getAll()
-        recycler.adapter = NotesAdapter(notes.toTypedArray(), this)
+    private fun refresh() {
+        lifecycleScope.launch {
+            val notes = db.noteDao().getAll()
+            (recycler.adapter as NotesAdapter).replaceData(notes.toTypedArray())
+        }
     }
 }

@@ -13,7 +13,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.text.DateFormat
 
-class NotesAdapter(private val dataSet: Array<Note>, var clickListener: onNoteItemClickListener) :
+class NotesAdapter(private var dataSet: Array<Note>, var clickListener: onNoteItemClickListener) :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -62,12 +62,18 @@ class NotesAdapter(private val dataSet: Array<Note>, var clickListener: onNoteIt
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.initialize(dataSet.get(position), clickListener)
+        viewHolder.initialize(dataSet[position], clickListener)
     }
 
     override fun getItemCount() = dataSet.size
 
     interface onNoteItemClickListener {
         fun onItemClick(item: Note, position: Int)
+    }
+
+    fun replaceData(newData: Array<Note>) {
+        notifyItemRangeRemoved(0, dataSet.size);
+        dataSet = newData
+        notifyItemRangeInserted(0, dataSet.size);
     }
 }
