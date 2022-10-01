@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">Notas</string>
+    <string name="note_content">Content</string>
+    <string name="note_date">20/9/2022 17:30</string>
+    <string name="title">Título</string>
+    <string name="access">Acceder</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="enable_biometrics">Habilitar autenticación biométrica</string>
+    <string name="type_note_title">Ingrese el título</string>
+    <string name="type_note_content">Ingrese el contenido</string>
+    <string name="add">Agregar</string>
+    <string name="add_note">Agregar nota</string>
+    <string name="please_type_login_info">Por favor ingrese un usuario y contraseña</string>
+    <string name="incorrect_login_info">Usuario o contraseña incorrectos</string>
+    <string name="create_account">Crear cuenta</string>
+    <string name="create">Crear</string>
+    <string name="access_your_notes">Acceso a tus notas</string>
+    <string name="use_biometrics_to_access">Utiliza autenticación biométrica para acceder</string>
+    <string name="use_login_info">Utilizar usuario y contraseña</string>
+    <string name="delete_note_question">¿Borrar nota?</string>
+    <string name="delete_note_question_confirm">¿Estás seguro que querés borrar esta nota?</string>
+    <string name="delete">Borrar</string>
+    <string name="deleted">Borrado!</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete_everything_question">¿Borrar todo?</string>
+    <string name="delete_everything_question_confirm">¿Estás seguro que querés borrar %1$d notas?</string>
+    <string name="delete_everything_100_sure">¿100% seguro?</string>
+    <string name="delete_everything_100_sure_confirm">Estás a punto de borrar todas las notas. Esta acción no se puede deshacer.</string>
+    <string name="delete_confirm">BORRAR!</string>
+
+
 </resources>

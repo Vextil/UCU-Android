@@ -44,8 +44,6 @@ class CreateNoteActivity : AppCompatActivity() {
 
         if (id != 0) {
             val note = db.noteDao().getById(id)
-            note.title?.let { Log.v("Note", it) }
-            note.body?.let { Log.v("Note", it) }
             initial_title = note.title.toString()
             initial_body = note.body.toString()
             initial_color = note.color
@@ -132,19 +130,19 @@ class CreateNoteActivity : AppCompatActivity() {
 
     private fun onDeleteNote(note: Note) {
         val mBottomSheetDialog = BottomSheetMaterialDialog.Builder(this)
-            .setTitle("¿Borrar nota?")
-            .setMessage("¿Estás seguro que querés borrar esta nota?")
+            .setTitle(getString(R.string.delete_note_question))
+            .setMessage(getString(R.string.delete_note_question_confirm))
             .setCancelable(false)
             .setPositiveButton(
-                "Borrar", R.drawable.ic_delete_24
+                getString(R.string.delete), R.drawable.ic_delete_24
             ) { dialogInterface, _ ->
                 db.noteDao().delete(note)
-                Toast.makeText(applicationContext, "Borrado!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.deleted), Toast.LENGTH_SHORT).show()
                 dialogInterface.dismiss()
                 finish()
             }
             .setNegativeButton(
-                "Cancelar", R.drawable.ic_baseline_close_24
+                getString(R.string.cancel), R.drawable.ic_baseline_close_24
             ) { dialogInterface, _ ->
                 dialogInterface.dismiss()
             }

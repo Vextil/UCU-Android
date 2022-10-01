@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,12 +32,12 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/main_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="?actionBarSize"
-            android:text="Acceder"
+            android:text="@string/access"
             android:textColor="#fff"
             android:textSize="40sp"
             android:textStyle="bold" />
@@ -50,11 +49,12 @@
             android:layout_margin="20sp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:textColor="#fff"
                 android:textColorHint="#eee"
                 android:textSize="17sp" />
@@ -70,27 +70,28 @@
             android:layout_marginBottom="0dp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Password"
-            android:inputType="textPassword"
 
-            android:textColor="#fff"
-            android:textColorHint="#eee"
-            android:textSize="17sp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+
+                android:textColor="#fff"
+                android:textColorHint="#eee"
+                android:textSize="17sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/biometricSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Habilitar autenticación biométrica"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:textColor="@color/white"
-            android:checked="true"/>
+            android:checked="true"
+            android:text="@string/enable_biometrics"
+            android:textColor="@color/white" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnlogin"
@@ -99,12 +100,10 @@
             android:background="@drawable/rounded_button"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="Acceder"
+            android:text="@string/access"
             android:textColor="#777" />
 
     </LinearLayout>
-
-
 
 
 </RelativeLayout>

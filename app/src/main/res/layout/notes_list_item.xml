@@ -15,11 +15,11 @@
         android:padding="10dp"
         android:elevation="2dp">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title"
+            android:text="@string/title"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             android:textColor="@color/black"
@@ -33,28 +33,27 @@
             app:layout_constraintTop_toBottomOf="@id/title"
             android:id="@+id/frame">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Content" />
+                android:text="@string/note_content" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/listBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Content"
                 android:orientation="vertical" />
 
         </FrameLayout>
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="italic"
             android:textSize="10sp"
-            android:text="20/9/2022 17:30"
+            android:text="@string/note_date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/frame"
             tools:ignore="SmallSp" />

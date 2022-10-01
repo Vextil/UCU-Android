@@ -16,6 +16,7 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.TypedArrayUtils.getString
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -35,8 +36,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupLogin() {
-        main_title.text = "Acceder"
-        btnlogin.text = "Acceder"
+        main_title.text = getString(R.string.access)
+        btnlogin.text = getString(R.string.access)
         biometricSwitch.visibility = View.INVISIBLE
         btnlogin.setOnClickListener {
             val username = username.text.toString()
@@ -44,14 +45,14 @@ class LoginActivity : AppCompatActivity() {
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(
                     this,
-                    "Por favor ingrese un usuario y contraseña",
+                    getString(R.string.please_type_login_info),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
                 if (pref.checkLogin(username, password)) {
                     goToNotesList()
                 } else {
-                    Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, getString(R.string.incorrect_login_info), Toast.LENGTH_SHORT)
                         .show()
                 }
             }
@@ -62,8 +63,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupSignUp() {
-        main_title.text = "Crear cuenta"
-        btnlogin.text = "Crear"
+        main_title.text = getString(R.string.create_account)
+        btnlogin.text = getString(R.string.create)
         biometricSwitch.visibility = View.VISIBLE
         btnlogin.setOnClickListener {
             val username = username.text.toString()
@@ -71,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(
                     this,
-                    "Por favor ingrese un usuario y contraseña",
+                    getString(R.string.please_type_login_info),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
@@ -151,9 +152,9 @@ class LoginActivity : AppCompatActivity() {
             })
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Acceso a tus notas")
-            .setSubtitle("Utiliza autenticación biométrica para acceder")
-            .setNegativeButtonText("Utilizar usuario y contraseña")
+            .setTitle(getString(R.string.access_your_notes))
+            .setSubtitle(getString(R.string.use_biometrics_to_access))
+            .setNegativeButtonText(getString(R.string.use_login_info))
             .build()
 
         biometricPrompt.authenticate(promptInfo)

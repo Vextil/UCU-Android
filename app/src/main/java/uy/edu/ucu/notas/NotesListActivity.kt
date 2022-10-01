@@ -30,7 +30,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             val isList = Random.nextBoolean()
             val list = mutableListOf<NoteListItem>()
             for (j in 1..i) {
-                list.add(NoteListItem(value = "Item $j", checked = Random.nextBoolean()))
+                list.add(NoteListItem(value = "Elemento $j", checked = Random.nextBoolean()))
             }
             val randomColor = when (Random.nextInt(0, 5)) {
                 1 -> R.color.note_orange
@@ -41,8 +41,8 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             }
             db.noteDao().insertAll(
                 Note(
-                    title = "Title $i",
-                    body = if (isList) Json.encodeToString(list) else "Content".repeat(i),
+                    title = "Título $i",
+                    body = if (isList) Json.encodeToString(list) else "Contenido ".repeat(i),
                     type = if (isList) NoteType.List else NoteType.Note,
                     lastModifiedDate = System.currentTimeMillis(),
                     color = randomColor
@@ -126,17 +126,17 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
     private suspend fun onDeleteAll() {
         val count = db.noteDao().getCount()
         val mBottomSheetDialog = BottomSheetMaterialDialog.Builder(this)
-            .setTitle("¿Borrar todo?")
-            .setMessage("¿Estás seguro que querés borrar $count notas?")
+            .setTitle(getString(R.string.delete_everything_question))
+            .setMessage(getString(R.string.delete_everything_question_confirm, count))
             .setCancelable(false)
             .setPositiveButton(
-                "Borrar", R.drawable.ic_delete_24
+                getString(R.string.delete), R.drawable.ic_delete_24
             ) { dialogInterface, _ ->
                 dialogInterface.dismiss()
                 onDeleteAllDoubleConfirm()
             }
             .setNegativeButton(
-                "Cancelar", R.drawable.ic_baseline_close_24
+                getString(R.string.cancel), R.drawable.ic_baseline_close_24
             ) { dialogInterface, _ ->
                 dialogInterface.dismiss()
             }
@@ -147,21 +147,21 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
 
     private fun onDeleteAllDoubleConfirm() {
         val mBottomSheetDialog = BottomSheetMaterialDialog.Builder(this)
-            .setTitle("¿100% seguro?")
-            .setMessage("Estás a punto de borrar todas las notas. Esta acción no se puede deshacer.")
+            .setTitle(getString(R.string.delete_everything_100_sure))
+            .setMessage(getString(R.string.delete_everything_100_sure_confirm))
             .setCancelable(false)
             .setPositiveButton(
-                "BORRAR!", R.drawable.ic_delete_24
+                getString(R.string.delete_confirm), R.drawable.ic_delete_24
             ) { dialogInterface, _ ->
                 lifecycleScope.launch {
                     db.noteDao().deleteAll()
                     refresh()
                 }
-                Toast.makeText(applicationContext, "Borrado!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.deleted), Toast.LENGTH_SHORT).show()
                 dialogInterface.dismiss()
             }
             .setNegativeButton(
-                "Cancelar", R.drawable.ic_baseline_close_24
+                getString(R.string.cancel), R.drawable.ic_baseline_close_24
             ) { dialogInterface, _ ->
                 dialogInterface.dismiss()
             }
