@@ -6,113 +6,133 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="4"
-            android:src="@drawable/ic_login"
+
             android:elevation="50dp"
-
             android:scaleType="centerCrop"
-            android:layout_width="match_parent"
-            android:layout_height="0dp" />
+            android:src="@drawable/ic_login" />
+
         <View
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="0dp"/>
-
-
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
     </LinearLayout>
 
 
     <LinearLayout
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical">
-        <Switch
-            android:id="@+id/themeSwitch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Switch" />
 
         <TextView
-            android:layout_margin="?actionBarSize"
-            android:textStyle="bold"
-            android:textSize="40sp"
-            android:textColor="#fff"
-            android:text="Sign in"
+            android:id="@+id/main_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/username"
+            android:layout_height="wrap_content"
+            android:layout_margin="?actionBarSize"
+            android:text="Acceder"
             android:textColor="#fff"
-            android:textColorHint="#eee"
-            android:paddingStart="10dp"
-            android:paddingLeft="10dp"
-            android:hint="Email"
-            android:layout_margin="20dp"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
+            android:layout_margin="20dp"
             android:background="@drawable/rounded_corner"
-            android:textSize="17sp" />
-        <EditText
-            android:id="@+id/password"
+            android:hint="Email"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:textColor="#fff"
             android:textColorHint="#eee"
-            android:paddingStart="10dp"
-            android:paddingLeft="10dp"
+            android:textSize="17sp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/rounded_corner"
             android:hint="Password"
             android:inputType="textPassword"
-            android:layout_margin="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:background="@drawable/rounded_corner"
-            android:textSize="17sp" />
-        <Button
-            android:id="@+id/btnlogin"
-            android:paddingRight="20dp"
-            android:paddingLeft="20dp"
-            android:background="@drawable/rounded_button"
-            android:text="Sign in"
-            android:textColor="#777"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp" />
-        <TextView
-            android:layout_marginTop="20dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:textColor="#fff"
-            android:text="Forgot Password?"
+            android:textColorHint="#eee"
+            android:textSize="17sp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/biometricSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Habilitar autenticación biométrica"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/white"
+            android:checked="true"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnlogin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Acceder"
+            android:textColor="#777" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Forgot Password?"
+            android:textColor="#fff"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="30dp"
         android:gravity="center"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_marginBottom="10dp"
-            android:text="Or Signup with"
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Or Signup with" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <ImageButton
-                android:layout_marginRight="15dp"
-                android:background="@drawable/google"
                 android:layout_width="40dp"
-                android:layout_height="40dp" />
+                android:layout_height="40dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/google" />
         </LinearLayout>
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/themeSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Modo oscuro" />
 
     </LinearLayout>
 

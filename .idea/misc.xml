@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/drawable/ic_login.xml" value="0.18" />
         <entry key="app/src/main/res/drawable/ic_view_list_24.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_create_note.xml" value="0.29404754638671876" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.2128623188405797" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_notes_list.xml" value="0.22972972972972974" />
         <entry key="app/src/main/res/layout/note_detail_list_item.xml" value="0.28629524120386096" />

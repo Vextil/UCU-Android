@@ -1,55 +1,41 @@
 package uy.edu.ucu.notas
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 
-class LoginPref {
-    lateinit var pref : SharedPreferences
-    lateinit var  editor : SharedPreferences.Editor
-    lateinit var  con : Context
-    var PRIVATEMODE : Int = 0
+class LoginPref(var context: Context) {
 
-    constructor(con : Context){
-        this.con = con
-        pref = con.getSharedPreferences(PREF_NAME,PRIVATEMODE)
-        editor = pref.edit()
+    private val pref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    private val editor: SharedPreferences.Editor = pref.edit()
+
+    companion object {
+        const val PREF_NAME = "Login_Preference"
+        const val KEY_USERNAME = "username"
+        const val KEY_PASSWORD = "email"
+        const val KEY_BIOMETRICS = "biometrics"
     }
 
-    companion object{
-        val PREF_NAME = "Login_Preference"
-        val IS_LOGIN = "isLoggedIn"
-        val KEY_USERNAME = "username"
-        val KEY_PASSWORD = "email"
+    fun userExists(): Boolean {
+        return pref.contains(KEY_USERNAME) && pref.contains(KEY_PASSWORD)
     }
 
-
-    fun createLoginSession(username : String,email: String){
-        if(!this.isLoggedIn()){
-            var i : Intent = Intent(con,LoginActivity::class.java)
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            con.startActivity(i)
-        }
+    fun biometricsEnabled(): Boolean {
+        return pref.getBoolean(KEY_BIOMETRICS, false)
     }
 
-    fun getUserDetails(): HashMap<String,String>{
-        var user: Map<String,String> = HashMap<String,String>()
-        (user as HashMap).put(KEY_USERNAME,pref.getString(KEY_USERNAME,null)!!)
-        (user as HashMap).put(KEY_PASSWORD,pref.getString(KEY_PASSWORD,null)!!)
-        return user
-    }
-
-    fun LogoutUser(){
-        editor.clear()
+    fun createUser(username: String, password: String, biometrics: Boolean) {
+        editor.putString(KEY_USERNAME, username)
+        editor.putString(KEY_PASSWORD, password)
+        editor.putBoolean(KEY_BIOMETRICS, biometrics)
         editor.commit()
-        var i : Intent = Intent(con, LoginActivity::class.java)
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        con.startActivity(i)
     }
 
-    fun isLoggedIn():Boolean{
-        return pref.getBoolean(IS_LOGIN,false)
+    fun checkLogin(username: String, password: String): Boolean {
+        if (userExists()) {
+            val user = pref.getString(KEY_USERNAME, null)
+            val pwd = pref.getString(KEY_PASSWORD, null)
+            return user == username && pwd == password
+        }
+        return false
     }
 }
