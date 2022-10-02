@@ -187,7 +187,6 @@ class CreateNoteActivity : AppCompatActivity() {
                 || isList != (initialType == NoteType.List)
                 || currentColor != initialColor
             ) {
-
                 note.title = new_title
                 note.body = new_body
                 note.color = currentColor
@@ -200,8 +199,8 @@ class CreateNoteActivity : AppCompatActivity() {
                         (!isList && new_title.isBlank() && new_body.isBlank()))
             ) {
                 val note = Note(
-                    title = note_title.text.toString(),
-                    body = note_body.text.toString(),
+                    title = new_title,
+                    body = new_body,
                     type = if (isList) NoteType.List else NoteType.Note,
                     lastModifiedDate = System.currentTimeMillis(),
                     color = currentColor
@@ -212,7 +211,6 @@ class CreateNoteActivity : AppCompatActivity() {
     }
 
     private fun listBodyIsBlank(body: String): Boolean {
-        Log.v("notebody", body)
         val list = Json.decodeFromString<List<NoteListItem>>(body)
         for (item in list) {
             if (item.value.isNotBlank()) {

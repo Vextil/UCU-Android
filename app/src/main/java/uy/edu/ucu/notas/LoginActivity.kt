@@ -15,16 +15,22 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity() {
 
     private val pref by lazy { LoginPref(this) }
+    private val GOOGLE_SIGN_IN = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
 
         if (pref.userExists()) {
             setupLogin()
@@ -33,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
 
     private fun setupLogin() {
         main_title.text = getString(R.string.access)
@@ -56,6 +63,19 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+
+        google_sign_in_button.setOnClickListener {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+            val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
+
+            val signInIntent = mGoogleSignInClient.signInIntent
+            mGoogleSignInClient.signOut();
+            startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
+        }
+
         if (pref.biometricsEnabled()) {
             biometricLogin()
         }
@@ -94,6 +114,18 @@ class LoginActivity : AppCompatActivity() {
 
             }
         }
+        google_sign_in_button.setOnClickListener {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+            val mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+            val signInIntent = mGoogleSignInClient.signInIntent
+            mGoogleSignInClient.signOut();
+
+            startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
+        }
+
+
     }
 
     private fun goToNotesList() {
@@ -141,6 +173,38 @@ class LoginActivity : AppCompatActivity() {
     // valid password
     private fun isValidPassword(target: CharSequence?): Boolean {
         return !TextUtils.isEmpty(target) && target!!.length >= 6
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GOOGLE_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                if (account != null) {
+                    if (pref.userExists()){
+                        if (pref.checkLogin(account.email!!, account.id!!)) {
+
+                            goToNotesList()
+                        } else {
+                            Toast.makeText(this, getString(R.string.incorrect_login_info), Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }else {
+                        pref.createUser(account.email!!, account.id!!, biometricSwitch.isChecked)
+                        if (biometricSwitch.isChecked) {
+                            configureBiometrics()
+                        }
+
+
+                        goToNotesList()
+                    }
+
+                }
+            } catch (e: ApiException) {
+                Log.w("Note", "Google sign in failed", e)
+            }
+        }
     }
     private fun biometricLogin() {
         val executor = ContextCompat.getMainExecutor(this)
