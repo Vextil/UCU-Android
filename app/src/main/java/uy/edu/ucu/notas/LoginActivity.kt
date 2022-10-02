@@ -4,20 +4,19 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.text.TextUtils
 import android.util.Log
+import android.util.Patterns
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.TypedArrayUtils.getString
 import kotlinx.android.synthetic.main.activity_login.*
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -69,6 +68,7 @@ class LoginActivity : AppCompatActivity() {
         btnlogin.setOnClickListener {
             val username = username.text.toString()
             val password = password.text.toString()
+
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(
                     this,
@@ -76,11 +76,22 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                pref.createUser(username, password, biometricSwitch.isChecked)
-                if (biometricSwitch.isChecked) {
-                    configureBiometrics()
+
+                if (!isValidEmail(username)) {
+                    Toast.makeText(this, "Mail invalido", Toast.LENGTH_SHORT).show()
+                } else {
+                    if (isValidPassword(password)) {
+                        pref.createUser(username, password, biometricSwitch.isChecked)
+                        if (biometricSwitch.isChecked) {
+                            configureBiometrics()
+                        }
+                        goToNotesList()
+                    } else {
+                        Toast.makeText(this, "Ingrese una contraseña de al menos 6 caracteres", Toast.LENGTH_SHORT).show()
+                    }
+
                 }
-                goToNotesList()
+
             }
         }
     }
@@ -122,6 +133,15 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun isValidEmail(target: CharSequence?): Boolean {
+        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
+    }
+
+    // valid password
+    private fun isValidPassword(target: CharSequence?): Boolean {
+        return !TextUtils.isEmpty(target) && target!!.length >= 6
+    }
     private fun biometricLogin() {
         val executor = ContextCompat.getMainExecutor(this)
         val biometricPrompt = BiometricPrompt(this, executor,
