@@ -18,4 +18,5 @@
     <color name="purple">#FF954CFB</color>
     <color name="toolbar_transparent">#3C000000</color>
     <color name="checkbox_transparent">#72000000</color>
+    <color name="text_transparent">#A6000000</color>
 </resources>

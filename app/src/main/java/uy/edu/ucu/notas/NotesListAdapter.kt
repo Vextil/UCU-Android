@@ -56,6 +56,12 @@ class NotesAdapter(private var dataSet: Array<Note>, var clickListener: onNoteIt
                     view.minimumHeight = 0
                     view.minimumWidth = 0
                     view.text = i.value
+                    view.setTextColor(
+                        ContextCompat.getColor(
+                            itemView.context,
+                            R.color.text_transparent
+                        )
+                    )
                     view.isChecked = i.checked
                     itemView.listBody.addView(view)
                 }

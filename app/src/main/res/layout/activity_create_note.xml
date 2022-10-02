@@ -35,9 +35,29 @@
                 android:layout_marginStart="15dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/delete_button"
+                app:layout_constraintEnd_toStartOf="@id/list_button"
                 app:layout_constraintStart_toEndOf="@id/back_button"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/list_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_view_list_24"
+                app:layout_constraintEnd_toStartOf="@id/note_button"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="20dp"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/note_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_baseline_note_24"
+                app:layout_constraintEnd_toStartOf="@id/delete_button"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="20dp"/>
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/delete_button"
@@ -61,7 +81,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:textColor="@color/text_transparent"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/note_body"
@@ -74,7 +95,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/note_title" />
+        app:layout_constraintTop_toBottomOf="@id/note_title"
+        android:textColor="@color/text_transparent"/>
 
     <ScrollView
         android:id="@+id/list_scroll"

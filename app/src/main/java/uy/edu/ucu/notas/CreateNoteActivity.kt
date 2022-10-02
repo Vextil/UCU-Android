@@ -1,7 +1,6 @@
 package uy.edu.ucu.notas
 
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.View
@@ -20,12 +19,13 @@ import kotlinx.serialization.json.Json
 
 class CreateNoteActivity : AppCompatActivity() {
 
-    private var initial_title = ""
-    private var initial_body = ""
-    private var initial_color = R.color.note_yellow
-    private var current_color = R.color.note_yellow
+    private var initialTitle = ""
+    private var initialBody = ""
+    private var initialType = NoteType.Note
+    private var initialColor = R.color.note_yellow
+    private var currentColor = R.color.note_yellow
     private val db by lazy { App.db(applicationContext) }
-    private val isList: Boolean by lazy { intent.getBooleanExtra("isList", false) }
+    private var isList = false
 
     private val colors = intArrayOf(
         R.color.note_yellow,
@@ -44,31 +44,40 @@ class CreateNoteActivity : AppCompatActivity() {
 
         if (id != 0) {
             val note = db.noteDao().getById(id)
-            initial_title = note.title.toString()
-            initial_body = note.body.toString()
-            initial_color = note.color
-            current_color = note.color
+            initialTitle = note.title.toString()
+            initialBody = note.body.toString()
+            initialType = note.type
+            initialColor = note.color
+            currentColor = note.color
+            isList = note.type == NoteType.List
             main_container.setBackgroundColor(ContextCompat.getColor(this, note.color))
             note_title.setText(note.title)
             if (note.type == NoteType.Note) {
-                list_scroll.visibility = View.GONE
                 note_body.setText(note.body)
             } else {
-                note_body.visibility = View.GONE
                 val list = Json.decodeFromString<List<NoteListItem>>(note.body!!)
                 for (item in list) {
                     addListItem(item.checked, item.value)
                 }
             }
-        } else {
-            if (isList) {
-                note_body.visibility = View.GONE
-            } else {
-                list_scroll.visibility = View.GONE
-            }
         }
+        refreshNoteType()
         add_item_to_list_button.setOnClickListener {
             addListItem(scroll = true)
+        }
+    }
+
+    private fun refreshNoteType() {
+        if (isList) {
+            note_body.visibility = View.GONE
+            list_scroll.visibility = View.VISIBLE
+            list_button.visibility = View.GONE
+            note_button.visibility = View.VISIBLE
+        } else {
+            note_body.visibility = View.VISIBLE
+            list_scroll.visibility = View.GONE
+            list_button.visibility = View.VISIBLE
+            note_button.visibility = View.GONE
         }
     }
 
@@ -109,6 +118,17 @@ class CreateNoteActivity : AppCompatActivity() {
             exitCreation(new_title, new_body, if (id != 0) db.noteDao().getById(id) else null)
             finish()
         }
+
+        list_button.setOnClickListener {
+            isList = true
+            refreshNoteType()
+        }
+
+        note_button.setOnClickListener {
+            isList = false
+            refreshNoteType()
+        }
+
         delete_button.setOnClickListener {
             lifecycleScope.launch {
                 val id = intent.getIntExtra("id", 0)
@@ -137,7 +157,8 @@ class CreateNoteActivity : AppCompatActivity() {
                 getString(R.string.delete), R.drawable.ic_delete_24
             ) { dialogInterface, _ ->
                 db.noteDao().delete(note)
-                Toast.makeText(applicationContext, getString(R.string.deleted), Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.deleted), Toast.LENGTH_SHORT)
+                    .show()
                 dialogInterface.dismiss()
                 finish()
             }
@@ -157,14 +178,16 @@ class CreateNoteActivity : AppCompatActivity() {
                 (!isList && new_title.isBlank() && new_body.isBlank())
             ) {
                 db.noteDao().delete(note)
-            } else if (new_title.trim() != initial_title.trim()
-                || new_body.trim() != initial_body.trim()
-                || current_color != initial_color
+            } else if (new_title.trim() != initialTitle.trim()
+                || new_body.trim() != initialBody.trim()
+                || isList != (initialType == NoteType.List)
+                || currentColor != initialColor
             ) {
 
                 note.title = new_title
                 note.body = new_body
-                note.color = current_color
+                note.color = currentColor
+                note.type = if (isList) NoteType.List else NoteType.Note
                 note.lastModifiedDate = System.currentTimeMillis()
                 db.noteDao().update(note)
             }
@@ -175,9 +198,9 @@ class CreateNoteActivity : AppCompatActivity() {
                 val note = Note(
                     title = note_title.text.toString(),
                     body = note_body.text.toString(),
-                    type = NoteType.Note,
+                    type = if (isList) NoteType.List else NoteType.Note,
                     lastModifiedDate = System.currentTimeMillis(),
-                    color = current_color
+                    color = currentColor
                 )
                 db.noteDao().insertAll(note)
             }
@@ -206,7 +229,7 @@ class CreateNoteActivity : AppCompatActivity() {
             v.layoutParams = layoutParams
             v.id = View.generateViewId()
             v.setOnClickListener {
-                current_color = color
+                currentColor = color
                 main_container.setBackgroundColor(ContextCompat.getColor(applicationContext, color))
             }
             colors_container.addView(v)

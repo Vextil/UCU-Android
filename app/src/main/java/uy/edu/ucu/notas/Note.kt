@@ -14,7 +14,7 @@ import java.util.*
 data class Note(
     var title: String?,
     var body: String?,
-    val type: NoteType,
+    var type: NoteType,
     var lastModifiedDate: Long,
     var color: Int = R.color.note_yellow
 ) {

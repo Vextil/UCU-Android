@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/show_list"
-        android:icon="@drawable/ic_view_list_24"
+        android:icon="@drawable/ic_baseline_view_headline_24"
         android:title="Show list"
         app:showAsAction="always" />
     <item

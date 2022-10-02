@@ -18,7 +18,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/checkbox"
         app:layout_constraintEnd_toStartOf="@id/delete"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/text_transparent"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/delete"
