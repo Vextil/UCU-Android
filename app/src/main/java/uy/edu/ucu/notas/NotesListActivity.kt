@@ -2,8 +2,10 @@ package uy.edu.ucu.notas
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -48,6 +50,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
                     color = randomColor
                 )
             )
+            setupToolbarButtons();
         }
 
         val notes = db.noteDao().getAll()
@@ -63,6 +66,11 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             startActivity(intent)
         }
 
+
+
+
+    }
+    private fun setupToolbarButtons() {
         search_view.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val notes = db.noteDao().getByFilter(("%$query%") ?: "",("%\"value\":\"$query%") ?: "")
@@ -76,40 +84,32 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
                 return true
             }
         })
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_show_list, menu)
-        menu.findItem(R.id.show_list).isVisible = showGrid
-        menu.findItem(R.id.show_grid).isVisible = !showGrid
-        return true
-    }
+        action_delete.setOnClickListener {
+            lifecycleScope.launch {
+                onDeleteAll()
+            }
+            true
+        }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.show_list -> {
-                showGrid = false
-                invalidateOptionsMenu()
-                recycler.layoutManager =
-                    LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-                true
-            }
-            R.id.show_grid -> {
-                showGrid = true
-                invalidateOptionsMenu()
-                recycler.layoutManager =
-                    StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-                true
-            }
-            R.id.action_delete -> {
-                lifecycleScope.launch {
-                    onDeleteAll()
-                }
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+        show_grid.setOnClickListener {
+            showGrid = true
+            show_grid.visibility = View.GONE
+            show_list.visibility = View.VISIBLE
+            recycler.layoutManager =
+                StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+            true
+        }
+
+        show_list.setOnClickListener {
+            showGrid = false
+            show_list.visibility = View.GONE
+            show_grid.visibility = View.VISIBLE
+            recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            true
         }
     }
+
 
     override fun onResume() {
         super.onResume()

@@ -78,6 +78,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="@string/type_note_title"
+        android:textColorHint="@color/text_transparent"
+
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,6 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="top"
+        android:textColorHint="@color/text_transparent"
         android:hint="@string/type_note_content"
         android:inputType="text|textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"

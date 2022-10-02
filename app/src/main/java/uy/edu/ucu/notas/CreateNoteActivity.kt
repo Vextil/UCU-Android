@@ -1,6 +1,7 @@
 package uy.edu.ucu.notas
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.View
@@ -55,6 +56,7 @@ class CreateNoteActivity : AppCompatActivity() {
             if (note.type == NoteType.Note) {
                 note_body.setText(note.body)
             } else {
+
                 val list = Json.decodeFromString<List<NoteListItem>>(note.body!!)
                 for (item in list) {
                     addListItem(item.checked, item.value)
@@ -174,7 +176,7 @@ class CreateNoteActivity : AppCompatActivity() {
 
     private fun exitCreation(new_title: String, new_body: String, note: Note?) {
         if (note != null) {
-            if ((isList && new_title.isBlank() && new_body == "[]") ||
+            if ((isList && new_title.isBlank() && listBodyIsBlank(new_body)) ||
                 (!isList && new_title.isBlank() && new_body.isBlank())
             ) {
                 db.noteDao().delete(note)
@@ -192,7 +194,7 @@ class CreateNoteActivity : AppCompatActivity() {
                 db.noteDao().update(note)
             }
         } else {
-            if (!((isList && new_title.isBlank() && new_body == "[]") ||
+            if (!((isList && new_title.isBlank() && listBodyIsBlank(new_body)) ||
                         (!isList && new_title.isBlank() && new_body.isBlank()))
             ) {
                 val note = Note(
@@ -205,6 +207,17 @@ class CreateNoteActivity : AppCompatActivity() {
                 db.noteDao().insertAll(note)
             }
         }
+    }
+
+    private fun listBodyIsBlank(body: String): Boolean {
+        Log.v("notebody", body)
+        val list = Json.decodeFromString<List<NoteListItem>>(body)
+        for (item in list) {
+            if (item.value.isNotBlank()) {
+                return false
+            }
+        }
+        return true
     }
 
     private fun createColorChooser() {
