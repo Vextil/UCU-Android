@@ -64,6 +64,8 @@ class CreateNoteActivity : AppCompatActivity() {
             }
         }
         refreshNoteType()
+        delete_button.visibility = if (id == 0) View.GONE else View.VISIBLE
+
         add_item_to_list_button.setOnClickListener {
             addListItem(scroll = true)
         }
