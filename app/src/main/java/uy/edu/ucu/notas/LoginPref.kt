@@ -38,4 +38,11 @@ class LoginPref(var context: Context) {
         }
         return false
     }
+
+    fun deleteUser() {
+        editor.remove(KEY_USERNAME)
+        editor.remove(KEY_PASSWORD)
+        editor.remove(KEY_BIOMETRICS)
+        editor.commit()
+    }
 }

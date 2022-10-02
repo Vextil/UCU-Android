@@ -31,13 +31,15 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        if (intent.getBooleanExtra("deleteUser", false)) {
+            pref.deleteUser()
+        }
 
         if (pref.userExists()) {
             setupLogin()
         } else {
             setupSignUp()
         }
-
     }
 
 
@@ -58,7 +60,11 @@ class LoginActivity : AppCompatActivity() {
                 if (pref.checkLogin(username, password)) {
                     goToNotesList()
                 } else {
-                    Toast.makeText(this, getString(R.string.incorrect_login_info), Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        this,
+                        getString(R.string.incorrect_login_info),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -107,7 +113,11 @@ class LoginActivity : AppCompatActivity() {
                         }
                         goToNotesList()
                     } else {
-                        Toast.makeText(this, "Ingrese una contraseña de al menos 6 caracteres", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Ingrese una contraseña de al menos 6 caracteres",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
 
                 }
@@ -182,15 +192,19 @@ class LoginActivity : AppCompatActivity() {
             try {
                 val account = task.getResult(ApiException::class.java)
                 if (account != null) {
-                    if (pref.userExists()){
+                    if (pref.userExists()) {
                         if (pref.checkLogin(account.email!!, account.id!!)) {
 
                             goToNotesList()
                         } else {
-                            Toast.makeText(this, getString(R.string.incorrect_login_info), Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                this,
+                                getString(R.string.incorrect_login_info),
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                         }
-                    }else {
+                    } else {
                         pref.createUser(account.email!!, account.id!!, biometricSwitch.isChecked)
                         if (biometricSwitch.isChecked) {
                             configureBiometrics()
@@ -206,6 +220,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun biometricLogin() {
         val executor = ContextCompat.getMainExecutor(this)
         val biometricPrompt = BiometricPrompt(this, executor,

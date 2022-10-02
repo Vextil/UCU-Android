@@ -2,9 +2,6 @@ package uy.edu.ucu.notas
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -62,13 +59,8 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             val intent = Intent(this, CreateNoteActivity::class.java)
             intent.putExtra("id", 0)
             intent.putExtra("isList", NoteType.Note == NoteType.List)
-
             startActivity(intent)
         }
-
-
-
-
     }
     private fun setupToolbarButtons() {
         search_view.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -122,7 +114,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
 
     private suspend fun onDeleteAll() {
         val count = db.noteDao().getCount()
-        val mBottomSheetDialog = BottomSheetMaterialDialog.Builder(this)
+        val deleteDialog = BottomSheetMaterialDialog.Builder(this)
             .setTitle(getString(R.string.delete_everything_question))
             .setMessage(getString(R.string.delete_everything_question_confirm, count))
             .setCancelable(false)
@@ -139,11 +131,11 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             }
             .build()
 
-        mBottomSheetDialog.show()
+        deleteDialog.show()
     }
 
     private fun onDeleteAllDoubleConfirm() {
-        val mBottomSheetDialog = BottomSheetMaterialDialog.Builder(this)
+        val confirmDeleteDialog = BottomSheetMaterialDialog.Builder(this)
             .setTitle(getString(R.string.delete_everything_100_sure))
             .setMessage(getString(R.string.delete_everything_100_sure_confirm))
             .setCancelable(false)
@@ -152,7 +144,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             ) { dialogInterface, _ ->
                 lifecycleScope.launch {
                     db.noteDao().deleteAll()
-                    refresh()
+                    goToLoginAndDeleteUser()
                 }
                 Toast.makeText(applicationContext, getString(R.string.deleted), Toast.LENGTH_SHORT).show()
                 dialogInterface.dismiss()
@@ -164,7 +156,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             }
             .build()
 
-        mBottomSheetDialog.show()
+        confirmDeleteDialog.show()
     }
 
     private fun refresh() {
@@ -173,5 +165,12 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             search_view.setQuery("", false)
             (recycler.adapter as NotesAdapter).replaceData(notes.toTypedArray())
         }
+    }
+
+    private fun goToLoginAndDeleteUser() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.putExtra("deleteUser", true)
+        startActivity(intent)
+        finish()
     }
 }

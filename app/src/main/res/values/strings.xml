@@ -23,10 +23,10 @@
     <string name="delete">Borrar</string>
     <string name="deleted">Borrado!</string>
     <string name="cancel">Cancelar</string>
-    <string name="delete_everything_question">¿Borrar todo?</string>
-    <string name="delete_everything_question_confirm">¿Estás seguro que querés borrar %1$d notas?</string>
+    <string name="delete_everything_question">¿Borrar absolutamente todo?</string>
+    <string name="delete_everything_question_confirm">¿Estás seguro que querés borrar %1$d notas y tu usuario?</string>
     <string name="delete_everything_100_sure">¿100% seguro?</string>
-    <string name="delete_everything_100_sure_confirm">Estás a punto de borrar todas las notas. Esta acción no se puede deshacer.</string>
+    <string name="delete_everything_100_sure_confirm">Estás a punto de borrar todas las notas y tu usuario. Esta acción no se puede deshacer.</string>
     <string name="delete_confirm">BORRAR!</string>
     <string name="delete_all">Borrar todo</string>
     <string name="show_grid">mostrar_grilla</string>

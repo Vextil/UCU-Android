@@ -99,8 +99,7 @@ class NotesAdapter(private var dataSet: Array<Note>, var clickListener: onNoteIt
     }
 
     fun replaceData(newData: Array<Note>) {
-        notifyItemRangeRemoved(0, dataSet.size);
         dataSet = newData
-        notifyItemRangeInserted(0, dataSet.size);
+        notifyDataSetChanged()
     }
 }
