@@ -4,16 +4,16 @@
     <item
         android:id="@+id/show_list"
         android:icon="@drawable/ic_baseline_view_headline_24"
-        android:title="Show list"
+        android:title="@string/show_list"
         app:showAsAction="always" />
     <item
         android:id="@+id/show_grid"
         android:icon="@drawable/ic_grid_on_24"
-        android:title="Show grid"
+        android:title="@string/show_grid"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_delete_forever_24"
-        android:title="Delete all"
+        android:title="@string/delete_all"
         app:showAsAction="always" />
 </menu>

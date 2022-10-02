@@ -28,6 +28,9 @@
     <string name="delete_everything_100_sure">¿100% seguro?</string>
     <string name="delete_everything_100_sure_confirm">Estás a punto de borrar todas las notas. Esta acción no se puede deshacer.</string>
     <string name="delete_confirm">BORRAR!</string>
+    <string name="delete_all">Borrar todo</string>
+    <string name="show_grid">mostrar_grilla</string>
+    <string name="show_list">Mostrar lista</string>
 
 
 </resources>

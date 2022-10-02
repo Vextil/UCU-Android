@@ -23,8 +23,9 @@ class NotesAdapter(private var dataSet: Array<Note>, var clickListener: onNoteIt
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun initialize(item: Note, action: onNoteItemClickListener) {
+            itemView.title.visibility = View.GONE
             itemView.title.text = item.title
-            itemView.body.text = item.title
+            itemView.body.text = null
             itemView.date.text = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
                 .format(item.lastModifiedDate)
             itemView.container.background.setTint(
@@ -33,9 +34,13 @@ class NotesAdapter(private var dataSet: Array<Note>, var clickListener: onNoteIt
                     item.color
                 )
             )
+            if (item.title == null || item.title!!.isEmpty()) {
+                itemView.title.visibility = View.GONE
+            } else {
+                itemView.title.visibility = View.VISIBLE
+            }
             itemView.listBody.removeAllViews()
             if (item.type == NoteType.List) {
-                itemView.body.text = null
                 var list: List<NoteListItem> = listOf()
                 try {
                     list = Json.decodeFromString(item.body ?: "[]")

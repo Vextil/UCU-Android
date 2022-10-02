@@ -73,13 +73,13 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
     private fun setupToolbarButtons() {
         search_view.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                val notes = db.noteDao().getByFilter(("%$query%") ?: "",("%\"value\":\"$query%") ?: "")
+                val notes = db.noteDao().getByFilter("%$query%", "%\"value\":\"%$query%")
                 (recycler.adapter as NotesAdapter).replaceData(notes.toTypedArray())
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val notes = db.noteDao().getByFilter(("%$newText%") ?: "",("%\"value\":\"$newText%") ?: "")
+                val notes = db.noteDao().getByFilter("%$newText%", "%\"value\":\"%$newText%")
                 (recycler.adapter as NotesAdapter).replaceData(notes.toTypedArray())
                 return true
             }
@@ -89,7 +89,6 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             lifecycleScope.launch {
                 onDeleteAll()
             }
-            true
         }
 
         show_grid.setOnClickListener {
@@ -98,7 +97,6 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             show_list.visibility = View.VISIBLE
             recycler.layoutManager =
                 StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-            true
         }
 
         show_list.setOnClickListener {
@@ -106,7 +104,6 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             show_list.visibility = View.GONE
             show_grid.visibility = View.VISIBLE
             recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            true
         }
     }
 
