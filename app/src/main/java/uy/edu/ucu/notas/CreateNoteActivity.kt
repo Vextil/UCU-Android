@@ -221,18 +221,18 @@ class CreateNoteActivity : AppCompatActivity() {
             resources.displayMetrics
         ).toInt()
         layoutParams.setMargins(0, 0, margin, 0)
-        var v: View
+        var view: View
         for (color in colors) {
-            v = View(this)
-            v.background = ContextCompat.getDrawable(applicationContext, R.drawable.circle)
-            v.background.setTint(ContextCompat.getColor(applicationContext, color))
-            v.layoutParams = layoutParams
-            v.id = View.generateViewId()
-            v.setOnClickListener {
+            view = View(this)
+            view.background = ContextCompat.getDrawable(applicationContext, R.drawable.circle)
+            view.background.setTint(ContextCompat.getColor(applicationContext, color))
+            view.layoutParams = layoutParams
+            view.id = View.generateViewId()
+            view.setOnClickListener {
                 currentColor = color
                 main_container.setBackgroundColor(ContextCompat.getColor(applicationContext, color))
             }
-            colors_container.addView(v)
+            colors_container.addView(view)
         }
     }
 }
