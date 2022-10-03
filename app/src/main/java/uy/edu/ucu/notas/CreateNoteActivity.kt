@@ -72,6 +72,7 @@ class CreateNoteActivity : AppCompatActivity() {
             addListItem(scroll = true)
         }
     }
+
     // Funcion para refrescar el tipo de nota
     private fun refreshNoteType() {
         if (isList) {
@@ -86,6 +87,7 @@ class CreateNoteActivity : AppCompatActivity() {
             note_button.visibility = View.GONE
         }
     }
+
     // Funcion para agregar un elemento a la lista
     private fun addListItem(checked: Boolean = false, value: String = "", scroll: Boolean = false) {
         val view = layoutInflater.inflate(R.layout.note_detail_list_item, null)
@@ -101,6 +103,7 @@ class CreateNoteActivity : AppCompatActivity() {
             }, 100)
         }
     }
+
     // Setup de los botones de la toolbar
     private fun setupToolbarButtons() {
         // Listener para el boton de ir atras
@@ -154,6 +157,7 @@ class CreateNoteActivity : AppCompatActivity() {
         menu.findItem(R.id.action_delete).isVisible = intent.getIntExtra("id", 0) != 0
         return true
     }
+
     // Funcion para eliminar una nota. Se muestra un dialogo de confirmacion
     private fun onDeleteNote(note: Note) {
         val mBottomSheetDialog = BottomSheetMaterialDialog.Builder(this)
@@ -178,6 +182,7 @@ class CreateNoteActivity : AppCompatActivity() {
 
         mBottomSheetDialog.show()
     }
+
     // Funcion para salir de la creacion de la nota. Si la nota es nueva, se crea una nueva nota. Si la nota ya existe, se actualiza
     private fun exitCreation(new_title: String, new_body: String, note: Note?) {
         // Si la nota ya existe

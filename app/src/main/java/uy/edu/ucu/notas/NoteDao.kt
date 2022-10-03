@@ -8,7 +8,7 @@ interface NoteDao {
     fun getAll(): List<Note>
 
     @Query("SELECT * FROM note WHERE title LIKE :filter OR body LIKE :filter order by lastModifiedDate desc")
-    fun getByFilter(filter : String): List<Note>
+    fun getByFilter(filter: String): List<Note>
 
     @Query("SELECT COUNT(1) FROM note")
     suspend fun getCount(): Int

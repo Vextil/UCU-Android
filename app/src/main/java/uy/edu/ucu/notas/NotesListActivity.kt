@@ -68,7 +68,8 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
 
     private fun setupToolbarButtons() {
         // Buscador de notas por titulo o contenido
-        search_view.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        search_view.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
@@ -76,7 +77,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             override fun onQueryTextChange(newText: String?): Boolean {
                 val notes = db.noteDao().getByFilter("%$newText%") as MutableList<Note>
                 val iterator = notes.iterator()
-                while(iterator.hasNext()){
+                while (iterator.hasNext()) {
                     val note = iterator.next()
                     var found = false
                     if (note.type == NoteType.List) {
@@ -134,6 +135,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         intent.putExtra("isList", item.type == NoteType.List)
         startActivity(intent)
     }
+
     // Funcion para eliminar todas las notas y el usuario. Se muestra un dialogo de confirmacion
     private suspend fun onDeleteAll() {
         val count = db.noteDao().getCount()
@@ -156,6 +158,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
 
         deleteDialog.show()
     }
+
     // Segundo dialogo de confirmacion para eliminar todas las notas y el usuario
     private fun onDeleteAllDoubleConfirm() {
         val confirmDeleteDialog = BottomSheetMaterialDialog.Builder(this)
@@ -169,7 +172,8 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
                     db.noteDao().deleteAll()
                     goToLoginAndDeleteUser()
                 }
-                Toast.makeText(applicationContext, getString(R.string.deleted), Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.deleted), Toast.LENGTH_SHORT)
+                    .show()
                 dialogInterface.dismiss()
             }
             .setNegativeButton(
@@ -181,6 +185,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
 
         confirmDeleteDialog.show()
     }
+
     // obtener las notas de la base de datos y actualizar el adaptador
     private fun refresh() {
         lifecycleScope.launch {
@@ -189,6 +194,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             (recycler.adapter as NotesAdapter).replaceData(notes.toTypedArray())
         }
     }
+
     // Ir a la actividad de login y eliminar el usuario
     private fun goToLoginAndDeleteUser() {
         val intent = Intent(this, LoginActivity::class.java)
