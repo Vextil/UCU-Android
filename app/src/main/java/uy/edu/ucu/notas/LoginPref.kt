@@ -5,7 +5,8 @@ import android.content.SharedPreferences
 
 class LoginPref(var context: Context) {
 
-    private val pref: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    private val pref: SharedPreferences =
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     private val editor: SharedPreferences.Editor = pref.edit()
 
     companion object {

@@ -31,10 +31,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+
         if (intent.getBooleanExtra("deleteUser", false)) {
             pref.deleteUser()
         }
-
+        // Si ya existe un usuario entonces login, sino signup
         if (pref.userExists()) {
             setupLogin()
         } else {

@@ -25,6 +25,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_list)
         val db = App.db(applicationContext)
+        // Creacion de notas aleatorias
         for (i in 1..20) {
             val isList = Random.nextBoolean()
             val list = mutableListOf<NoteListItem>()
@@ -55,6 +56,8 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
 
         recycler.adapter = adapter
         recycler.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+
+        // boton de crear una nueva nota
         fab.setOnClickListener { _ ->
             val intent = Intent(this, CreateNoteActivity::class.java)
             intent.putExtra("id", 0)
@@ -62,27 +65,47 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
             startActivity(intent)
         }
     }
+
     private fun setupToolbarButtons() {
-        search_view.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        // Buscador de notas por titulo o contenido
+        search_view.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                val notes = db.noteDao().getByFilter("%$query%", "%\"value\":\"%$query%")
-                (recycler.adapter as NotesAdapter).replaceData(notes.toTypedArray())
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val notes = db.noteDao().getByFilter("%$newText%", "%\"value\":\"%$newText%")
+                val notes = db.noteDao().getByFilter("%$newText%") as MutableList<Note>
+                val iterator = notes.iterator()
+                while (iterator.hasNext()) {
+                    val note = iterator.next()
+                    var found = false
+                    if (note.type == NoteType.List) {
+                        val list = note.body?.let { Json.decodeFromString<List<NoteListItem>>(it) }
+                        if (list != null) {
+                            for (item in list) {
+                                if (item.value.contains(newText!!, true)) {
+                                    found = true
+                                    break
+                                }
+                            }
+                            if (!found) {
+                                iterator.remove()
+                            }
+                        }
+                    }
+                }
                 (recycler.adapter as NotesAdapter).replaceData(notes.toTypedArray())
                 return true
             }
         })
-
+        // Accion de eliminar todas las notas y usuario
         action_delete.setOnClickListener {
             lifecycleScope.launch {
                 onDeleteAll()
             }
         }
-
+        // Accion de cambiar el tipo de vista de las notas
         show_grid.setOnClickListener {
             showGrid = true
             show_grid.visibility = View.GONE
@@ -91,6 +114,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
                 StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         }
 
+        // Accion de cambiar el tipo de vista de las notas
         show_list.setOnClickListener {
             showGrid = false
             show_list.visibility = View.GONE
@@ -99,7 +123,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         }
     }
 
-
+    // Cuando volvemos de la actividad de crear una nota
     override fun onResume() {
         super.onResume()
         refresh()
@@ -112,6 +136,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         startActivity(intent)
     }
 
+    // Funcion para eliminar todas las notas y el usuario. Se muestra un dialogo de confirmacion
     private suspend fun onDeleteAll() {
         val count = db.noteDao().getCount()
         val deleteDialog = BottomSheetMaterialDialog.Builder(this)
@@ -134,6 +159,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         deleteDialog.show()
     }
 
+    // Segundo dialogo de confirmacion para eliminar todas las notas y el usuario
     private fun onDeleteAllDoubleConfirm() {
         val confirmDeleteDialog = BottomSheetMaterialDialog.Builder(this)
             .setTitle(getString(R.string.delete_everything_100_sure))
@@ -146,7 +172,8 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
                     db.noteDao().deleteAll()
                     goToLoginAndDeleteUser()
                 }
-                Toast.makeText(applicationContext, getString(R.string.deleted), Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, getString(R.string.deleted), Toast.LENGTH_SHORT)
+                    .show()
                 dialogInterface.dismiss()
             }
             .setNegativeButton(
@@ -159,6 +186,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         confirmDeleteDialog.show()
     }
 
+    // obtener las notas de la base de datos y actualizar el adaptador
     private fun refresh() {
         lifecycleScope.launch {
             val notes = db.noteDao().getAll()
@@ -167,6 +195,7 @@ class NotesListActivity : AppCompatActivity(), NotesAdapter.onNoteItemClickListe
         }
     }
 
+    // Ir a la actividad de login y eliminar el usuario
     private fun goToLoginAndDeleteUser() {
         val intent = Intent(this, LoginActivity::class.java)
         intent.putExtra("deleteUser", true)

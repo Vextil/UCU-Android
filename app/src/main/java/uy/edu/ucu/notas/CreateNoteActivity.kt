@@ -42,7 +42,7 @@ class CreateNoteActivity : AppCompatActivity() {
         createColorChooser()
         setupToolbarButtons();
         val id = intent.getIntExtra("id", 0)
-
+        // Caso en el que estemos editando una nota
         if (id != 0) {
             val note = db.noteDao().getById(id)
             initialTitle = note.title.toString()
@@ -56,7 +56,7 @@ class CreateNoteActivity : AppCompatActivity() {
             if (note.type == NoteType.Note) {
                 note_body.setText(note.body)
             } else {
-
+                // Si es de Tipo Lista, la deserializamos y la mostramos
                 val list = Json.decodeFromString<List<NoteListItem>>(note.body!!)
                 for (item in list) {
                     addListItem(item.checked, item.value)
@@ -64,13 +64,16 @@ class CreateNoteActivity : AppCompatActivity() {
             }
         }
         refreshNoteType()
+        // Ocultamos el boton de eliminar si es una nota nueva
         delete_button.visibility = if (id == 0) View.GONE else View.VISIBLE
 
+        // Listener para el boton de agregar elemento a la lista
         add_item_to_list_button.setOnClickListener {
             addListItem(scroll = true)
         }
     }
 
+    // Funcion para refrescar el tipo de nota
     private fun refreshNoteType() {
         if (isList) {
             note_body.visibility = View.GONE
@@ -85,6 +88,7 @@ class CreateNoteActivity : AppCompatActivity() {
         }
     }
 
+    // Funcion para agregar un elemento a la lista
     private fun addListItem(checked: Boolean = false, value: String = "", scroll: Boolean = false) {
         val view = layoutInflater.inflate(R.layout.note_detail_list_item, null)
         view.checkbox.isChecked = checked
@@ -100,7 +104,9 @@ class CreateNoteActivity : AppCompatActivity() {
         }
     }
 
+    // Setup de los botones de la toolbar
     private fun setupToolbarButtons() {
+        // Listener para el boton de ir atras
         back_button.setOnClickListener {
             val id = intent.getIntExtra("id", 0)
             val new_title = note_title.text.toString()
@@ -152,6 +158,7 @@ class CreateNoteActivity : AppCompatActivity() {
         return true
     }
 
+    // Funcion para eliminar una nota. Se muestra un dialogo de confirmacion
     private fun onDeleteNote(note: Note) {
         val mBottomSheetDialog = BottomSheetMaterialDialog.Builder(this)
             .setTitle(getString(R.string.delete_note_question))
@@ -176,12 +183,16 @@ class CreateNoteActivity : AppCompatActivity() {
         mBottomSheetDialog.show()
     }
 
+    // Funcion para salir de la creacion de la nota. Si la nota es nueva, se crea una nueva nota. Si la nota ya existe, se actualiza
     private fun exitCreation(new_title: String, new_body: String, note: Note?) {
+        // Si la nota ya existe
         if (note != null) {
+            // Si la nota esta vacia, se elimina
             if ((isList && new_title.isBlank() && listBodyIsBlank(new_body)) ||
                 (!isList && new_title.isBlank() && new_body.isBlank())
             ) {
                 db.noteDao().delete(note)
+                // Si la nota tiene cambios, se actualiza
             } else if (new_title.trim() != initialTitle.trim()
                 || new_body.trim() != initialBody.trim()
                 || isList != (initialType == NoteType.List)
@@ -194,7 +205,8 @@ class CreateNoteActivity : AppCompatActivity() {
                 note.lastModifiedDate = System.currentTimeMillis()
                 db.noteDao().update(note)
             }
-        } else {
+        } else {    // Si la nota es nueva
+            // Si la nota no esta vacia, se crea
             if (!((isList && new_title.isBlank() && listBodyIsBlank(new_body)) ||
                         (!isList && new_title.isBlank() && new_body.isBlank()))
             ) {
@@ -210,6 +222,7 @@ class CreateNoteActivity : AppCompatActivity() {
         }
     }
 
+    // Funcion para comprobar si el cuerpo de una lista esta vacio
     private fun listBodyIsBlank(body: String): Boolean {
         val list = Json.decodeFromString<List<NoteListItem>>(body)
         for (item in list) {
@@ -220,6 +233,31 @@ class CreateNoteActivity : AppCompatActivity() {
         return true
     }
 
+    // Funcion para cuando se pulsa el boton de atras
+    override fun onBackPressed() {
+        val id = intent.getIntExtra("id", 0)
+        val new_title = note_title.text.toString()
+        val new_body = if (!isList) {
+            note_body.text.toString()
+        } else {
+            val list = mutableListOf<NoteListItem>()
+            for (i in 0 until note_list_contanier.childCount) {
+                val view = note_list_contanier.getChildAt(i)
+                list.add(
+                    NoteListItem(
+                        view.text.text.toString(),
+                        view.checkbox.isChecked
+                    )
+                )
+            }
+            Json.encodeToString(list)
+        }
+        exitCreation(new_title, new_body, if (id != 0) db.noteDao().getById(id) else null)
+        finish()
+        super.onBackPressed()
+    }
+
+    // Funcion para crear la eleccion de colores
     private fun createColorChooser() {
         val size =
             TypedValue.applyDimension(
