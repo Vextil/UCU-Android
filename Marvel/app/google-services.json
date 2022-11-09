@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "663833236971",
+    "project_id": "ucu-android",
+    "storage_bucket": "ucu-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663833236971:android:84d39bbe0b016c0155b5ae",
+        "android_client_info": {
+          "package_name": "edu.ucu.marvel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663833236971-kvin2kphjo2qs6dgfjcnka3p87idq7l0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjRfC1Fjb_2paJKGZPw56JcN51vjnc3VA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663833236971-kvin2kphjo2qs6dgfjcnka3p87idq7l0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
