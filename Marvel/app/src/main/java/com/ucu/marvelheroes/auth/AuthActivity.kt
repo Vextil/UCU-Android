@@ -52,6 +52,11 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun createAccount(email: String, password: String) {
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(baseContext, "Email or password is empty.",
+                Toast.LENGTH_SHORT).show()
+            return
+        }
         Toast.makeText(baseContext, "Registering...", Toast.LENGTH_SHORT).show()
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
@@ -78,6 +83,11 @@ class AuthActivity : AppCompatActivity() {
 
 
     private fun signIn(email: String, password: String) {
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(baseContext, "Email or password is empty.",
+                Toast.LENGTH_SHORT).show()
+            return
+        }
         Toast.makeText(baseContext, "Logging in...", Toast.LENGTH_SHORT).show()
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->

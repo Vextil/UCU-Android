@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">MarvelHeroes</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="auth_title">Login to Marvel</string>
+    <string name="auth_subtitle">Discover all our heroes</string>
+    <string name="login_google">Continue with Google</string>
+    <string name="login_ucu">Continue with UCU</string>
+    <string name="login_also">You can also</string>
+    <string name="terms_footer">by continuing you accept our Terms and Conditions &amp; Privacy Policy</string>
 </resources>
