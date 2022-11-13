@@ -9,4 +9,5 @@ data class CharactersResponse(
     val `data`: Data,
     val etag: String,
     val status: String
+
 )

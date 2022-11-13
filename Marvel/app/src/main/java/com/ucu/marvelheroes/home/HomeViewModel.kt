@@ -8,16 +8,24 @@ import kotlinx.coroutines.launch
 class HomeViewModel: ViewModel() {
 
     private val charactersRepository = CharactersRepository
+    var offset = 0
 
     private val _characters = MutableLiveData<List<MarvelCharacter>>()
     val characters: LiveData<List<MarvelCharacter>>
         get() = _characters
 
-
-    fun refreshCharacters() {
-        viewModelScope.launch {
-            charactersRepository.fetchCharacters().run {
-                _characters.postValue(this)
+    fun refreshCharacters(query: String){
+        if (query.isEmpty()) {
+            viewModelScope.launch {
+                charactersRepository.fetchCharacters().run {
+                    _characters.postValue(this)
+                }
+            }
+        } else {
+            viewModelScope.launch {
+                charactersRepository.fetchCharacters(query).run {
+                    _characters.postValue(this)
+                }
             }
         }
     }

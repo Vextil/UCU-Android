@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:layout_gravity="center"
+
+    >
+    <View
+        android:id="@+id/viewshadow"
+        android:layout_width="165dp"
+        android:layout_height="300dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/custombordershadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/card"
+        ></View>
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/MyCardView"
+        android:id="@+id/card"
+        android:layout_width="175dp"
+        android:layout_height="300dp"
+        android:layout_margin="10dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/__c_gray_900"
+        app:cardElevation="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/__c_gray_300"
+
+            >
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/customborder2">
+                <ImageView
+                    android:id="@+id/comicImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@tools:sample/avatars" />
+            </FrameLayout>
+
+
+
+            <TextView
+                android:id="@+id/comicName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="TEXTO"
+                android:textSize="16dp"
+                android:textFontWeight="700"
+                />
+
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
