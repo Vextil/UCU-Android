@@ -62,7 +62,8 @@ object CharactersRepository {
                 apiKey = BuildConfig.PUBLIC_KEY,
                 orderBy = "-modified",
                 ts = timeStamp,
-                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5().toHex()
+                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5().toHex(),
+                limit = 10
             )
         Log.v("comics", comics.toString())
         return ComicNetworkMapper.fromGetCharactersResponse(comics)

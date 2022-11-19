@@ -14,7 +14,7 @@ object ComicNetworkMapper: EntityMapper<Result, MarvelComic> {
             title = entity.title,
             description = entity.description,
             issueNumber = entity.issueNumber,
-            thumbnailUrl = "${entity.thumbnail.path}${entity.thumbnail.extension}"
+            thumbnailUrl = "${entity.thumbnail.path}.${entity.thumbnail.extension}"
 
         )
     }

@@ -37,21 +37,13 @@ class ComicAdapter(private val items: List<MarvelComic>, var clickListener: onCo
 class ComicViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
     var comicName = itemView.findViewById<TextView>(R.id.comicName)
     var comicImage = itemView.findViewById<ImageView>(R.id.comicImage)
-    val viewshadow = itemView.findViewById<View>(R.id.viewshadow)
 
 
     fun initialize(item: MarvelComic, action: onComicItemClickListener){
-
-        val drawable = viewshadow.background.mutate() as GradientDrawable
-        drawable.color = ContextCompat.getColorStateList(itemView.context, R.color.__c_blue_300)
-        viewshadow.background = drawable;
         comicName.text = item.title
 
-        val url = item.thumbnailUrl?.substringBeforeLast("jpg")
-//        movieDescription.text = item.description ?: "No description"
-        Log.v("TAREA", "$url.jpg")
-
-        comicImage.load("$url.jpg")
+        val url = item.thumbnailUrl?.replace("http", "https")
+        comicImage.load(url)
 
 
 

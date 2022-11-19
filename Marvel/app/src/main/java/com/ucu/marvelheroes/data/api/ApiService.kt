@@ -23,7 +23,10 @@ interface ApiService {
         @Query("apikey") apiKey: String,
         @Query("orderBy") orderBy: String,
         @Query("ts") ts: String,
-        @Query("hash") hash: String
+        @Query("hash") hash: String,
+        @Query("limit") limit: Int? = null
+
+
 
     ):CharactersResponse
 }

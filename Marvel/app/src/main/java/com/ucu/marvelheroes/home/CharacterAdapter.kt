@@ -40,16 +40,11 @@ class CharacterAdapter(private val items: List<MarvelCharacter>, var clickListen
 
 
         fun initialize(item: MarvelCharacter, action:onCharacterItemClickListener){
-            val viewshadow = itemView.findViewById<View>(R.id.viewshadow)
-            val drawable = viewshadow.background.mutate() as GradientDrawable
-            drawable.color = ContextCompat.getColorStateList(itemView.context, R.color.__c_blue_300)
-            viewshadow.background = drawable;
             characterName.text = item.name
 
-//            substring before the last dot
-            val url = item.thumbnailUrl?.substringBeforeLast("jpg")
+            val url = item.thumbnailUrl?.replace("http", "https")
 
-            characterImage.load("$url.jpg")
+            characterImage.load(url)
 
 
             itemView.setOnClickListener {
