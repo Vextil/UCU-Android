@@ -245,6 +245,7 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/button_yellow"
                 android:enabled="@{!viewModel.loading}"
+                android:onClick="@{v -> viewModel.onGoogleLoginClick()}"
                 android:paddingTop="0dp"
                 android:paddingBottom="4dp"
                 android:text="@string/login_google"

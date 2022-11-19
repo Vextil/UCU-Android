@@ -5,6 +5,7 @@ import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.ucu.marvelheroes.data.source.repositories.AuthRepository
 import kotlinx.coroutines.launch
 
@@ -15,6 +16,8 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     val loading = MutableLiveData(false)
     val error = MutableLiveData(AuthError.NONE)
     val state = MutableLiveData(AuthState.LOGGED_OUT)
+    val googleLogin = MutableLiveData(false)
+    private val googleAccount = MutableLiveData<GoogleSignInAccount>()
 
     init {
         viewModelScope.launch {
@@ -64,6 +67,24 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
+    fun onGoogleLoginClick() {
+        googleLogin.value = true
+        loading.value = true
+    }
+
+    fun setGoogleAccount(account: GoogleSignInAccount) {
+        viewModelScope.launch {
+            googleAccount.value = account
+            val success = authRepository.googleLogin(account)
+            if (success) {
+                state.value = AuthState.LOGGED_IN
+            } else {
+                error.value = AuthError.GOOGLE_LOGIN_FAILED
+            }
+            loading.value = false
+        }
+    }
+
     fun emailIsInvalid(email: String?): Boolean {
         return email.isNullOrEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
@@ -82,6 +103,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         INVALID_EMAIL,
         INVALID_PASSWORD,
         LOGIN_FAILED,
+        GOOGLE_LOGIN_FAILED,
         REGISTER_FAILED
     }
 }
