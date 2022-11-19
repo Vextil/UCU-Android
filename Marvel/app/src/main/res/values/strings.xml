@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">MarvelHeroes</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="auth_title">Login to Marvel</string>
+    <string name="auth_subtitle">Discover all our heroes</string>
+    <string name="login_google">Continue with Google</string>
+    <string name="login_ucu">Continue with UCU</string>
+    <string name="login_also">You can also</string>
+    <string name="terms_footer">by continuing you accept our Terms and Conditions &amp; Privacy Policy</string>
+    <string name="email_invalid">Email address is not a valid address</string>
+    <string name="password_invalid">Password is not valid (min length: 6)</string>
+    <string name="login_failed">Login failed, email or password is incorrect or user does not exist.</string>
+    <string name="user_already_exists">A user with that email already exists, try logging in.</string>
 </resources>

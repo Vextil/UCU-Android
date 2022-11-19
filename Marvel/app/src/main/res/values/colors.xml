@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="error_red">#FFC5032B</color>
+
 
 
     <color name = "__c_gray_100"> #fbf8f2</color>
@@ -24,4 +26,6 @@
     <color name = "__c_yellow_300"> #f8e0b1</color>
     <color name = "__c_yellow_500"> #f9bc73</color>
     <color name = "melrose">#c6bcfa</color>
+    
+    <color name="background_grey">#F1F2F9</color>
 </resources>
