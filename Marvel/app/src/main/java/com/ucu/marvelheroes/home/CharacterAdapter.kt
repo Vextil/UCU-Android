@@ -16,7 +16,7 @@ import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
 
 
 
-class CharacterAdapter(private val items: List<MarvelCharacter>, var clickListener: onCharacterItemClickListener) : RecyclerView.Adapter<CharacterViewHolder>() {
+class CharacterAdapter(private val items: ArrayList<MarvelCharacter>, var clickListener: onCharacterItemClickListener) : RecyclerView.Adapter<CharacterViewHolder>() {
 
         override fun getItemCount(): Int {
             return items.size
@@ -52,6 +52,8 @@ class CharacterAdapter(private val items: List<MarvelCharacter>, var clickListen
             }
 
         }
+
+
 
     }
     interface  onCharacterItemClickListener{

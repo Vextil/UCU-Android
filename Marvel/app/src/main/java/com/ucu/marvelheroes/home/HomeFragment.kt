@@ -17,10 +17,11 @@ import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
 import com.ucu.marvelheroes.details.CharacterDetailsFragment
 import java.util.*
 
+
 class HomeFragment : Fragment(),onCharacterItemClickListener {
     private var timer = Timer()
     private lateinit var adapter: CharacterAdapter
-
+    private lateinit var layoutManager: StaggeredGridLayoutManager
     private val viewModel: HomeViewModel by lazy {
         ViewModelProvider(this, HomeViewModel.Factory())[HomeViewModel::class.java]
     }
@@ -33,6 +34,7 @@ class HomeFragment : Fragment(),onCharacterItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.newCharacters("")
     }
 
 
@@ -43,11 +45,38 @@ class HomeFragment : Fragment(),onCharacterItemClickListener {
         viewModel.characters.observe(this)
         {
             val recycler = requireView().findViewById<RecyclerView>(R.id.recycler)
-            recycler.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-
-            recycler.adapter = CharacterAdapter(viewModel.characters.value ?: emptyList(),this)
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+            recycler.setHasFixedSize(true)
+            recycler.layoutManager = layoutManager
+            adapter = CharacterAdapter((viewModel.characters.value ?: emptyList()) as ArrayList<MarvelCharacter>, this)
+            recycler.adapter = adapter
+            recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager = recyclerView.layoutManager as StaggeredGridLayoutManager
+                    val visibleItemCount = layoutManager.childCount
+                    val totalItemCount = layoutManager.itemCount
+                    val firstVisibleItemPositions = layoutManager.findFirstVisibleItemPositions(null)
+                    var firstVisibleItemPosition = 0
+                    if (!viewModel.loading){
+                        if (firstVisibleItemPositions.size > 0) {
+                            firstVisibleItemPosition = firstVisibleItemPositions[0]
+                        }
+                        if (visibleItemCount + firstVisibleItemPosition >= totalItemCount
+                            && firstVisibleItemPosition >= 0
+                            && totalItemCount >= 20
+                        ) {
+                            val charactersearch = requireView().findViewById<EditText>(R.id.charactersearch)
+                            Log.v("...", " Reached Last Item")
+                            viewModel.loadMore(charactersearch.text.toString())
+                        }
+                    }
+                }
+            })
         }
-                viewModel.refreshCharacters("")
+
+
     }
 
 
@@ -66,7 +95,9 @@ class HomeFragment : Fragment(),onCharacterItemClickListener {
                 timer = Timer()
                 timer.schedule(object : TimerTask() {
                     override fun run() {
-                        viewModel.refreshCharacters(charactersearch.text.toString())
+
+                        viewModel.searchCharacters(s.toString())
+
                     }
                 }, 500)
 
@@ -81,9 +112,6 @@ class HomeFragment : Fragment(),onCharacterItemClickListener {
 
 
     override fun onItemClick(item: MarvelCharacter, position: Int) {
-        Log.v("LLLEVAR A DETALLE", "LLEVAR A DETALLE")
-//        open detail fragment
-
         val detailsFragment = CharacterDetailsFragment()
         val bundle = Bundle()
         bundle.putString("characterId", item.id)
@@ -95,15 +123,6 @@ class HomeFragment : Fragment(),onCharacterItemClickListener {
         transaction.replace(R.id.home_layout, detailsFragment)
         transaction.addToBackStack(null)
         transaction.commit()
-
-
-//        val intent = Intent(this, DetailsCharacter::class.java)
-//        intent.putExtra("id", item.id.toInt())
-//        Log.v("ID", item.id)
-//        startActivity(intent)
-//        val intent = Intent(this, DetailsActivity::class.java)
-//        intent.putExtra("id", item.id)
-//        startActivity(intent)
 
     }
 
