@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-
+        android:name=".App"
         android:theme="@style/Theme.MarvelHeroes"
         tools:targetApi="31">
         <activity
