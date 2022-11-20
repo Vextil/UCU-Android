@@ -17,6 +17,7 @@ class HomeViewModel(private val charactersRepository: CharactersRepository) : Vi
 
     fun load(query: String?) {
         viewModelScope.launch {
+            if (loading.value == true) return@launch
             loading.value = true
             search.value = query
             val characters = charactersRepository.fetchCharacters(search.value, 0)
@@ -27,14 +28,12 @@ class HomeViewModel(private val charactersRepository: CharactersRepository) : Vi
 
     fun loadMore() {
         viewModelScope.launch {
-            if (loading.value != true) {
-                loading.value = true
-                offset += 20
-                charactersRepository.fetchCharacters(search.value, offset).run {
-                    _characters.value = _characters.value?.plus(this)
-                    loading.value = false
-                }
-            }
+            if (loading.value == true) return@launch
+            loading.value = true
+            offset += 20
+            val characters = charactersRepository.fetchCharacters(search.value, offset)
+            _characters.value = _characters.value?.plus(characters)
+            loading.value = false
         }
     }
 }
