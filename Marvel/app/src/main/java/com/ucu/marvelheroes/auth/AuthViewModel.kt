@@ -72,16 +72,21 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         loading.value = true
     }
 
-    fun setGoogleAccount(account: GoogleSignInAccount) {
+    fun setGoogleAccount(account: GoogleSignInAccount?) {
         viewModelScope.launch {
-            googleAccount.value = account
-            val success = authRepository.googleLogin(account)
-            if (success) {
-                state.value = AuthState.LOGGED_IN
+            if (account == null) {
+                error.value = AuthError.NONE
+                loading.value = false
             } else {
-                error.value = AuthError.GOOGLE_LOGIN_FAILED
+                googleAccount.value = account!!
+                val success = authRepository.googleLogin(account)
+                if (success) {
+                    state.value = AuthState.LOGGED_IN
+                } else {
+                    error.value = AuthError.GOOGLE_LOGIN_FAILED
+                }
+                loading.value = false
             }
-            loading.value = false
         }
     }
 
