@@ -78,17 +78,10 @@ class CharacterDetailsFragment : Fragment(), onComicItemClickListener {
     override fun onItemClick(item: MarvelComic, position: Int) {
         Log.v("LLLEVAR A DETALLE", item.issueNumber.toString())
 
-//        open detail fragment
         val detailsFragment = ComicDetailsFragment()
-        val bundle = Bundle()
-
-        bundle.putString("comicId", item.id)
-        bundle.putString("comicName", item.title)
-        bundle.putDouble("comicIssueNumber", item.issueNumber)
-        bundle.putString("comicDescription", item.description)
-
-        bundle.putString("comicImage", item.thumbnailUrl)
-        detailsFragment.arguments = bundle
+        detailsFragment.arguments = Bundle().apply {
+           putParcelable(ComicDetailsFragment.ARG_COMIC, item)
+        }
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.home_layout, detailsFragment)
         transaction.addToBackStack(null)

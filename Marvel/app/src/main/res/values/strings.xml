@@ -14,4 +14,5 @@
     <string name="password_invalid">Password is not valid (min length: 6)</string>
     <string name="login_failed">Login failed, email or password is incorrect or user does not exist.</string>
     <string name="user_already_exists">A user with that email already exists, try logging in.</string>
+    <string name="issue_number">Issue: %1$s</string>
 </resources>

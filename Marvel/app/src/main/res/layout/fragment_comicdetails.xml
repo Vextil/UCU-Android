@@ -1,63 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/__c_gray_100"
-    xmlns:tools="http://schemas.android.com/tools">
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        >
+<layout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.ucu.marvelheroes.comicdetails.ComicDetailViewModel" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/__c_gray_100"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="10dip"
-            android:layout_marginTop="20dp"
+            android:layout_alignParentTop="true">
 
-            >
-            <TextView
-                android:id="@+id/comicName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TEXTO"
-                android:textSize="34dp"
-                android:textFontWeight="700"
-                />
-            <TextView
-                android:id="@+id/comicIssueNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TEXTO"></TextView>
-
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:paddingBottom="10dip">
 
-                >
-                <ImageView
-                    android:id="@+id/comicImage"
+                <TextView
+                    android:id="@+id/comicName"
+                    style="@style/bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.comic.title}"
+                    android:textSize="34sp"
+                    tools:text="Comic Name" />
+
+                <TextView
+                    android:id="@+id/comicIssueNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/issue_number(viewModel.comic.issueNumber)}"
+                    tools:text="Issue number" />
+
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerCrop"
-                    tools:srcCompat="@tools:sample/avatars" />
-            </FrameLayout>
-            <TextView
-                android:id="@+id/comicDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="57dp"
-                android:text="TEXTO"
-                android:textSize="20dp"
-                />
-        </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/comicImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        app:imageUrl="@{viewModel.comic.thumbnailUrl}"
+                        tools:srcCompat="@tools:sample/avatars" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/comicDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="57dp"
+                    android:text="@{viewModel.comic.description}"
+                    android:textSize="20sp"
+                    tools:text="Comic description" />
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</layout>
