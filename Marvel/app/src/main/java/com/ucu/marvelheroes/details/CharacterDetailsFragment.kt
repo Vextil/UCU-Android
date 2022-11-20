@@ -8,26 +8,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.comicdetails.ComicDetailsFragment
-import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
 import com.ucu.marvelheroes.data.domain.model.MarvelComic
-import com.ucu.marvelheroes.home.CharacterAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CharacterDetailsFragment : Fragment(), onComicItemClickListener {
     private lateinit var characterId: String
     private lateinit var characterName: String
     private lateinit var characterDescription: String
     private lateinit var characterImageUrl: String
-    private val viewModel: CharacterDetailViewModel by lazy {
-        ViewModelProvider(this, CharacterDetailViewModel.Factory())[CharacterDetailViewModel::class.java]
-    }
+    private val viewModel: CharacterDetailViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,6 +1,5 @@
 package com.ucu.marvelheroes.auth
 
-import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

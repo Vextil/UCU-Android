@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ucu.marvelheroes.R
-import com.ucu.marvelheroes.details.ComicAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ComicDetailsFragment : Fragment() {
     private lateinit var comicId: String
@@ -23,9 +23,7 @@ class ComicDetailsFragment : Fragment() {
     private lateinit var comicImageUrl: String
     private var comicIssueNumber: Double = 0.0
 
-    private val viewModel: ComicDetailViewModel by lazy {
-        ViewModelProvider(this, ComicDetailViewModel.Factory())[ComicDetailViewModel::class.java]
-    }
+    private val viewModel: ComicDetailViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

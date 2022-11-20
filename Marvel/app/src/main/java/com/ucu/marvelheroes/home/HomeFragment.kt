@@ -9,23 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
 import com.ucu.marvelheroes.details.CharacterDetailsFragment
 import java.util.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class HomeFragment : Fragment(),onCharacterItemClickListener {
+class HomeFragment : Fragment(), OnCharacterItemClickListener {
+
     private var timer = Timer()
     private lateinit var adapter: CharacterAdapter
     private lateinit var layoutManager: StaggeredGridLayoutManager
-    private val viewModel: HomeViewModel by lazy {
-        ViewModelProvider(this, HomeViewModel.Factory())[HomeViewModel::class.java]
-    }
-
+    private val viewModel: HomeViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,82 +32,39 @@ class HomeFragment : Fragment(),onCharacterItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.newCharacters("")
-    }
-
-
-
-    override fun onResume() {
-        super.onResume()
-        setSearchTextChangeListener()
-        viewModel.characters.observe(this)
-        {
-            val recycler = requireView().findViewById<RecyclerView>(R.id.recycler)
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
-            recycler.setHasFixedSize(true)
-            recycler.layoutManager = layoutManager
-            adapter = CharacterAdapter((viewModel.characters.value ?: emptyList()) as ArrayList<MarvelCharacter>, this)
-            recycler.adapter = adapter
-            recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val layoutManager = recyclerView.layoutManager as StaggeredGridLayoutManager
-                    val visibleItemCount = layoutManager.childCount
-                    val totalItemCount = layoutManager.itemCount
-                    val firstVisibleItemPositions = layoutManager.findFirstVisibleItemPositions(null)
-                    var firstVisibleItemPosition = 0
-                    if (!viewModel.loading){
-                        if (firstVisibleItemPositions.size > 0) {
-                            firstVisibleItemPosition = firstVisibleItemPositions[0]
-                        }
-                        if (visibleItemCount + firstVisibleItemPosition >= totalItemCount
-                            && firstVisibleItemPosition >= 0
-                            && totalItemCount >= 20
-                        ) {
-                            val charactersearch = requireView().findViewById<EditText>(R.id.charactersearch)
-                            Log.v("...", " Reached Last Item")
-                            viewModel.loadMore(charactersearch.text.toString())
-                        }
-                    }
-                }
-            })
+        val recycler = requireView().findViewById<RecyclerView>(R.id.recycler)
+        layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+        recycler.setHasFixedSize(true)
+        recycler.layoutManager = layoutManager
+        adapter = CharacterAdapter(viewModel.characters.value ?: emptyList(), this)
+        recycler.adapter = adapter
+        recycler.addOnScrollListener(OnScrollListener(viewModel, layoutManager))
+        viewModel.load(null)
+        viewModel.characters.observe(viewLifecycleOwner) {
+            adapter.update(it)
         }
-
+        setSearchTextChangeListener()
 
     }
 
-
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.characters.removeObservers(this)
-    }
-
-    private fun setSearchTextChangeListener(){
+    private fun setSearchTextChangeListener() {
         val charactersearch = requireView().findViewById<EditText>(R.id.charactersearch)
         charactersearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-
                 timer.cancel()
                 timer = Timer()
                 timer.schedule(object : TimerTask() {
                     override fun run() {
-
-                        viewModel.searchCharacters(s.toString())
-
+                        viewModel.load(s.toString())
                     }
                 }, 500)
-
-
             }
-            override fun beforeTextChanged(s: CharSequence, start: Int,count: Int, after: Int) { }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
     }
-
-
-
 
     override fun onItemClick(item: MarvelCharacter, position: Int) {
         val detailsFragment = CharacterDetailsFragment()
@@ -123,7 +78,29 @@ class HomeFragment : Fragment(),onCharacterItemClickListener {
         transaction.replace(R.id.home_layout, detailsFragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
 
+    class OnScrollListener(
+        val viewModel: HomeViewModel,
+        private val layoutManager: StaggeredGridLayoutManager
+    ) : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val visibleItemCount = layoutManager.childCount
+            val totalItemCount = layoutManager.itemCount
+            val firstVisibleItemPositions = layoutManager.findFirstVisibleItemPositions(null)
+            var firstVisibleItemPosition = 0
+            if (firstVisibleItemPositions.size > 0) {
+                firstVisibleItemPosition = firstVisibleItemPositions[0]
+            }
+            if (visibleItemCount + firstVisibleItemPosition >= totalItemCount
+                && firstVisibleItemPosition >= 0
+                && totalItemCount >= 20
+            ) {
+                Log.v("...", " Reached Last Item")
+                viewModel.loadMore()
+            }
+        }
     }
 
 

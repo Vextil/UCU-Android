@@ -2,56 +2,54 @@ package com.ucu.marvelheroes.data.source.repositories
 
 import android.util.Log
 import com.ucu.marvelheroes.BuildConfig
+import com.ucu.marvelheroes.data.api.ApiService
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
-import com.ucu.marvelheroes.data.api.MarvelClient
 import com.ucu.marvelheroes.data.api.model.CharacterNetworkMapper
 import com.ucu.marvelheroes.data.api.model.ComicNetworkMapper
 import com.ucu.marvelheroes.data.domain.model.MarvelComic
+import com.ucu.marvelheroes.data.source.interfaces.ICharactersRepository
 import com.ucu.marvelheroes.extensions.md5
 import com.ucu.marvelheroes.extensions.toHex
 import java.util.*
 
-object CharactersRepository {
+class CharactersRepository(private val marvelService: ApiService) : ICharactersRepository {
 
-    suspend fun fetchCharacters(offset: Int): List<MarvelCharacter> {
+    override suspend fun fetchCharacters(query: String?, offset: Int): List<MarvelCharacter> {
         val timeStamp = Date().time.toString()
-        val characters = MarvelClient.service
-            .listCharacters(
+        val characters = if (query.isNullOrEmpty()) {
+            marvelService.listCharacters(
                 apiKey = BuildConfig.PUBLIC_KEY,
                 orderBy = "name",
                 ts = timeStamp,
-                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5().toHex(),
+                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5()
+                    .toHex(),
                 offset = offset
             )
-
-        return CharacterNetworkMapper.fromGetCharactersResponse(characters)
-    }
-
-    suspend fun fetchCharactersStartsWith(query: String,offset: Int): List<MarvelCharacter> {
-        val timeStamp = Date().time.toString()
-        val characters = MarvelClient.service
-            .listCharacters(
+        } else {
+            marvelService.listCharacters(
                 apiKey = BuildConfig.PUBLIC_KEY,
                 orderBy = "name",
                 ts = timeStamp,
-                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5().toHex(),
+                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5()
+                    .toHex(),
                 nameStartsWith = query,
                 offset = offset
-
             )
+        }
 
         return CharacterNetworkMapper.fromGetCharactersResponse(characters)
     }
 
-    suspend fun fetchComics(characterId: Int): List<MarvelComic> {
+    override suspend fun fetchComics(characterId: Int): List<MarvelComic> {
         val timeStamp = Date().time.toString()
-        val comics = MarvelClient.service
+        val comics = marvelService
             .getComics(
                 characterId = characterId,
                 apiKey = BuildConfig.PUBLIC_KEY,
                 orderBy = "title",
                 ts = timeStamp,
-                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5().toHex(),
+                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5()
+                    .toHex(),
                 limit = 10
             )
         Log.v("comics", comics.toString())

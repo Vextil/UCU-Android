@@ -11,14 +11,15 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
-
         startKoin {
-            // Log Koin into Android logger
             androidLogger()
-            // Reference Android context
             androidContext(this@App)
-            // Load modules
-            modules(DiModule.repositoriesModule, DiModule.viewModelsModule, DiModule.thirdPartyModule)
+            modules(
+                DiModule.repositoriesModule,
+                DiModule.viewModelsModule,
+                DiModule.thirdPartyModule,
+                DiModule.apiModule
+            )
         }
     }
 }

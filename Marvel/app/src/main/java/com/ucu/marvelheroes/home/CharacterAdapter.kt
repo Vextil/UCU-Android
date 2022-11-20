@@ -1,61 +1,65 @@
 package com.ucu.marvelheroes.home
 
-
-import android.graphics.drawable.GradientDrawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
 
+class CharacterAdapter(
+    private val initialItems: List<MarvelCharacter>,
+    private var clickListener: OnCharacterItemClickListener
+) : RecyclerView.Adapter<CharacterViewHolder>() {
 
+    private val items = MutableList(initialItems.size) { initialItems[it] }
 
-class CharacterAdapter(private val items: ArrayList<MarvelCharacter>, var clickListener: onCharacterItemClickListener) : RecyclerView.Adapter<CharacterViewHolder>() {
-
-        override fun getItemCount(): Int {
-            return items.size
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-            var characterViewHolder = CharacterViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.heroesitem, parent, false))
-            return characterViewHolder
-        }
-
-
-        override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-            holder.initialize(items.get(position),clickListener)
-        }
-
+    override fun getItemCount(): Int {
+        return items.size
     }
-    class CharacterViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
-        var characterName = itemView.findViewById<TextView>(R.id.characterName)
-        var characterImage = itemView.findViewById<ImageView>(R.id.characterImage)
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder =
+        CharacterViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.heroesitem, parent, false)
+        )
 
+    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
+        holder.initialize(items[position], clickListener)
+    }
 
-        fun initialize(item: MarvelCharacter, action:onCharacterItemClickListener){
-            characterName.text = item.name
-
-            val url = item.thumbnailUrl?.replace("http", "https")
-
-            characterImage.load(url)
-
-
-            itemView.setOnClickListener {
-                action.onItemClick(item, adapterPosition)
-            }
-
+    fun update(newItems: List<MarvelCharacter>) {
+        val oldSize = items.size
+        val newSize = newItems.size
+        if (newSize > oldSize) {
+            items.addAll(newItems.subList(oldSize, newSize))
+            notifyItemRangeInserted(oldSize, newSize - oldSize)
+        } else {
+            items.clear()
+            items.addAll(newItems)
+            notifyItemRangeRemoved(newSize, oldSize - newSize)
         }
-
-
-
     }
-    interface  onCharacterItemClickListener{
-        fun onItemClick(item: MarvelCharacter,position: Int)
+
+}
+
+class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private var characterName = itemView.findViewById<TextView>(R.id.characterName)
+    private var characterImage = itemView.findViewById<ImageView>(R.id.characterImage)
+
+    fun initialize(item: MarvelCharacter, action: OnCharacterItemClickListener) {
+        characterName.text = item.name
+        characterImage.load(item.thumbnailUrl)
+
+        itemView.setOnClickListener {
+            action.onItemClick(item, adapterPosition)
+        }
     }
+
+}
+
+interface OnCharacterItemClickListener {
+    fun onItemClick(item: MarvelCharacter, position: Int)
+}
