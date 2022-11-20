@@ -30,6 +30,12 @@ class CharacterAdapter(
         holder.initialize(items[position], clickListener)
     }
 
+    fun clear() {
+        val size = items.size
+        items.clear()
+        notifyItemRangeRemoved(0, size)
+    }
+
     fun update(newItems: List<MarvelCharacter>) {
         val oldSize = items.size
         val newSize = newItems.size

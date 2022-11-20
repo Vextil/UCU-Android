@@ -56,6 +56,7 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
                 timer = Timer()
                 timer.schedule(object : TimerTask() {
                     override fun run() {
+                        adapter.clear()
                         viewModel.load(s.toString())
                     }
                 }, 500)
