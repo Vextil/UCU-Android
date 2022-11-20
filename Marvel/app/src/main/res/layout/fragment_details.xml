@@ -34,7 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/customborder2"
 >
         <ImageView
             android:id="@+id/characterImage"
@@ -64,25 +63,50 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/bottom_sheet"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     android:orientation="vertical"
-    android:background="@color/__c_green_300">
+    android:background="@drawable/bottom_sheet">
 
     <TextView
+        android:id="@+id/titleComic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="26dp"
-        android:text="COMICS">
-
-    </TextView>
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:text="COMICS"/>
     <FrameLayout
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="@id/titleComic"
+        android:layout_marginRight="15dp"
+
+        android:layout_marginTop="10dp"
+        android:paddingBottom="5dp"
+        android:paddingEnd="5dp"
+        android:background="@drawable/customborder"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/ic_baseline_arrow_forward_24">
+        </Button>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/customborder2"
+        android:layout_below="@id/titleComic"
         android:elevation="5dp">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -90,13 +114,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="@color/__c_green_300"
-            android:layout_margin="1dp"
+            android:requiresFadingEdge="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             >
 
         </androidx.recyclerview.widget.RecyclerView>
     </FrameLayout>
 
-</LinearLayout>
+</RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

@@ -13,25 +13,12 @@ import java.util.*
 
 object CharactersRepository {
 
-    suspend fun fetchCharacters(): List<MarvelCharacter> {
-        val timeStamp = Date().time.toString()
-        val characters = MarvelClient.service
-            .listCharacters(
-                apiKey = BuildConfig.PUBLIC_KEY,
-                orderBy = "-modified",
-                ts = timeStamp,
-                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5().toHex()
-            )
-
-        return CharacterNetworkMapper.fromGetCharactersResponse(characters)
-    }
-
     suspend fun fetchCharacters(offset: Int): List<MarvelCharacter> {
         val timeStamp = Date().time.toString()
         val characters = MarvelClient.service
             .listCharacters(
                 apiKey = BuildConfig.PUBLIC_KEY,
-                orderBy = "-modified",
+                orderBy = "name",
                 ts = timeStamp,
                 hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5().toHex(),
                 offset = offset
@@ -40,15 +27,17 @@ object CharactersRepository {
         return CharacterNetworkMapper.fromGetCharactersResponse(characters)
     }
 
-    suspend fun fetchCharacters(query: String): List<MarvelCharacter> {
+    suspend fun fetchCharactersStartsWith(query: String,offset: Int): List<MarvelCharacter> {
         val timeStamp = Date().time.toString()
         val characters = MarvelClient.service
             .listCharacters(
                 apiKey = BuildConfig.PUBLIC_KEY,
-                orderBy = "-modified",
+                orderBy = "name",
                 ts = timeStamp,
                 hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5().toHex(),
-                nameStartsWith = query
+                nameStartsWith = query,
+                offset = offset
+
             )
 
         return CharacterNetworkMapper.fromGetCharactersResponse(characters)
@@ -60,9 +49,10 @@ object CharactersRepository {
             .getComics(
                 characterId = characterId,
                 apiKey = BuildConfig.PUBLIC_KEY,
-                orderBy = "-modified",
+                orderBy = "title",
                 ts = timeStamp,
-                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5().toHex()
+                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5().toHex(),
+                limit = 10
             )
         Log.v("comics", comics.toString())
         return ComicNetworkMapper.fromGetCharactersResponse(comics)

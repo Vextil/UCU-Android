@@ -70,9 +70,9 @@ class CharacterDetailsFragment : Fragment(), onComicItemClickListener {
         } else {
             characterDescription.text = this.characterDescription
         }
+        val url = this.characterImageUrl?.replace("http", "https")
 
-        val url = this.characterImageUrl?.substringBeforeLast("jpg")
-        characterImage.load("$url.jpg")
+        characterImage.load(url)
         viewModel.refreshComics(characterId.toInt())
     }
       override fun onPause() {

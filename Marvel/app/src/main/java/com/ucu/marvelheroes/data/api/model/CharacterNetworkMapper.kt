@@ -10,7 +10,7 @@ object CharacterNetworkMapper: EntityMapper<Result, MarvelCharacter> {
             id = entity.id,
             name = entity.name,
             description = entity.description,
-            thumbnailUrl = "${entity.thumbnail.path}${entity.thumbnail.extension}"
+            thumbnailUrl = "${entity.thumbnail.path}.${entity.thumbnail.extension}"
         )
     }
 

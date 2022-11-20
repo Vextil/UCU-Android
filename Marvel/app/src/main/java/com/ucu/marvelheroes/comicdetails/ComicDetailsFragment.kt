@@ -77,9 +77,9 @@ class ComicDetailsFragment : Fragment() {
         } else {
             comicDescription.text = this.comicDescription
         }
+        val url = comicImageUrl.replace("http", "https")
 
-        val url = this.comicImageUrl?.substringBeforeLast("jpg")
-        comicImage.load("$url.jpg")
+        comicImage.load(url)
 
     }
     override fun onPause() {
