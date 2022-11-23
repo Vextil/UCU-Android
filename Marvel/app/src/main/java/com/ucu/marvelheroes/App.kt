@@ -19,6 +19,7 @@ class App: Application() {
                 DiModule.viewModelsModule,
                 DiModule.thirdPartyModule,
                 DiModule.apiModule
+
             )
         }
     }

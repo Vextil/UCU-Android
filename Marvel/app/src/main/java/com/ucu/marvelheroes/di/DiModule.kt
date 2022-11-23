@@ -6,6 +6,7 @@ import com.google.firebase.ktx.Firebase
 import com.ucu.marvelheroes.auth.AuthViewModel
 import com.ucu.marvelheroes.details.CharacterDetailViewModel
 import com.ucu.marvelheroes.comicdetails.ComicDetailViewModel
+import com.ucu.marvelheroes.moreComics.MoreComicsViewModel
 import com.ucu.marvelheroes.data.api.ApiService
 import com.ucu.marvelheroes.data.api.MarvelClient
 import com.ucu.marvelheroes.home.HomeViewModel
@@ -30,6 +31,7 @@ class DiModule {
             viewModelOf(::HomeViewModel)
             viewModelOf(::CharacterDetailViewModel)
             viewModelOf(::ComicDetailViewModel)
+            viewModelOf(::MoreComicsViewModel)
         }
 
         val thirdPartyModule = module {

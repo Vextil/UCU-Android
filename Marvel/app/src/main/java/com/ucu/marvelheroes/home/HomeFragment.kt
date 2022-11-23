@@ -45,6 +45,14 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
         }
         viewModel.characters.observe(viewLifecycleOwner) {
             adapter.update(it)
+            if (it.isEmpty()) {
+                recycler.visibility = View.GONE
+                requireView().findViewById<View>(R.id.emptyview).visibility = View.VISIBLE
+            } else {
+                recycler.visibility = View.VISIBLE
+                requireView().findViewById<View>(R.id.emptyview).visibility = View.GONE
+            }
+
         }
         setSearchTextChangeListener()
 
@@ -60,6 +68,7 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
                     override fun run() {
                         adapter.clear()
                         viewModel.load(s.toString())
+
                     }
                 }, 500)
             }
