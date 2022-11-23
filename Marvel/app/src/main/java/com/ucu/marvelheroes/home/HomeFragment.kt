@@ -25,6 +25,8 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
     private lateinit var layoutManager: StaggeredGridLayoutManager
     private val viewModel: HomeViewModel by viewModel()
 
+    private var previousSearch = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,6 +40,8 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
         recycler.setHasFixedSize(true)
         recycler.layoutManager = layoutManager
         adapter = CharacterAdapter(viewModel.characters.value ?: emptyList(), this)
+        adapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         recycler.adapter = adapter
         recycler.addOnScrollListener(OnScrollListener(viewModel, layoutManager))
         if (viewModel.characters.value.isNullOrEmpty()) {
@@ -63,14 +67,15 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
         charactersearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 timer.cancel()
-                timer = Timer()
-                timer.schedule(object : TimerTask() {
-                    override fun run() {
-                        adapter.clear()
-                        viewModel.load(s.toString())
-
-                    }
-                }, 500)
+                if (s.toString() != previousSearch) {
+                    timer = Timer()
+                    timer.schedule(object : TimerTask() {
+                        override fun run() {
+                            viewModel.load(s.toString())
+                        }
+                    }, 500)
+                    previousSearch = s.toString()
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

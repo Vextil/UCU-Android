@@ -1,6 +1,7 @@
 package com.ucu.marvelheroes.home
 
-import android.util.Log
+import android.content.res.Resources
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
+
 
 class CharacterAdapter(
     private val initialItems: List<MarvelCharacter>,
@@ -66,8 +68,14 @@ class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun initialize(item: MarvelCharacter, action: OnCharacterItemClickListener) {
         characterName.text = item.name
+        val r: Resources = itemView.context.resources
+        val px = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            item.height,
+            r.displayMetrics
+        )
+        characterImage.layoutParams.height = px.toInt()
         characterImage.load(item.thumbnailUrl)
-
         itemView.setOnClickListener {
             action.onItemClick(item, adapterPosition)
         }

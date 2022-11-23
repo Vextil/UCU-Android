@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.ucu.marvelheroes.comicdetails.ComicDetailViewModel" />
+            type="com.ucu.marvelheroes.comicDetails.ComicDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -5,7 +5,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.ucu.marvelheroes.auth.AuthViewModel
 import com.ucu.marvelheroes.details.CharacterDetailViewModel
-import com.ucu.marvelheroes.comicdetails.ComicDetailViewModel
+import com.ucu.marvelheroes.comicDetails.ComicDetailViewModel
 import com.ucu.marvelheroes.moreComics.MoreComicsViewModel
 import com.ucu.marvelheroes.data.api.ApiService
 import com.ucu.marvelheroes.data.api.MarvelClient

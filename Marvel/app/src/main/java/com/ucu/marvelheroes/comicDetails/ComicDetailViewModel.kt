@@ -1,4 +1,4 @@
-package com.ucu.marvelheroes.comicdetails
+package com.ucu.marvelheroes.comicDetails
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

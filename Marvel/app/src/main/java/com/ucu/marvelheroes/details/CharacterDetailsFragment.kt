@@ -11,13 +11,11 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ucu.marvelheroes.R
-import com.ucu.marvelheroes.comicdetails.ComicDetailsFragment
+import com.ucu.marvelheroes.comicDetails.ComicDetailsFragment
 import com.ucu.marvelheroes.data.domain.model.MarvelComic
-import com.ucu.marvelheroes.home.CharacterAdapter
 import com.ucu.marvelheroes.moreComics.MoreComicsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
