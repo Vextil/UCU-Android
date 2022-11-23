@@ -8,7 +8,7 @@ import com.ucu.marvelheroes.data.domain.model.MarvelComic
 
 class ComicDetailViewModel() : ViewModel() {
 
-    val comic: MutableLiveData<MarvelComic> = MutableLiveData(MarvelComic("", "", "", 0.0, ""))
+    val comic: MutableLiveData<MarvelComic> = MutableLiveData(null)
 
     companion object {
 
