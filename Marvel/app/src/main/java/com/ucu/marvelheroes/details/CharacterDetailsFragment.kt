@@ -11,19 +11,23 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.comicdetails.ComicDetailsFragment
 import com.ucu.marvelheroes.data.domain.model.MarvelComic
+import com.ucu.marvelheroes.home.CharacterAdapter
 import com.ucu.marvelheroes.moreComics.MoreComicsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CharacterDetailsFragment : Fragment(), onComicItemClickListener {
+class CharacterDetailsFragment : Fragment(), OnComicItemClickListener {
     private lateinit var characterId: String
     private lateinit var characterName: String
     private lateinit var characterDescription: String
     private lateinit var characterImageUrl: String
+    private lateinit var adapter: ComicAdapter
+    private lateinit var layoutManager: LinearLayoutManager
     private val viewModel: CharacterDetailViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,22 +46,6 @@ class CharacterDetailsFragment : Fragment(), onComicItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    }
-    override fun onResume() {
-        super.onResume()
-        BottomSheetBehavior.from(view?.findViewById(R.id.bottom_sheet)!!).apply {
-            peekHeight = 100
-            this.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-
-        viewModel.characters.observe(this)
-        {
-            val recycler = requireView().findViewById<RecyclerView>(R.id.recycler)
-            recycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
-            recycler.adapter = ComicAdapter(viewModel.characters.value ?: emptyList(),this)
-        }
-        Log.v("CharacterDetail", "characterId: $characterId")
         val characterName = requireView().findViewById<TextView>(R.id.characterName)
         val characterDescription = requireView().findViewById<TextView>(R.id.characterDescription)
         val characterImage = requireView().findViewById<ImageView>(R.id.characterImage)
@@ -67,11 +55,34 @@ class CharacterDetailsFragment : Fragment(), onComicItemClickListener {
         } else {
             characterDescription.text = this.characterDescription
         }
-        val url = this.characterImageUrl?.replace("http", "https")
 
-        characterImage.load(url)
-        viewModel.refreshComics(characterId.toInt())
-        // get buttonMoreComics
+        characterImage.load(characterImageUrl)
+        val recycler = requireView().findViewById<RecyclerView>(R.id.recycler)
+        layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recycler.layoutManager = layoutManager
+        adapter = ComicAdapter(viewModel.characters.value ?: emptyList(),this)
+
+        recycler.adapter = adapter
+        viewModel.load(characterId.toInt())
+        viewModel.characters.observe(viewLifecycleOwner) {
+
+            adapter.update(it)
+            if (it.isEmpty()) {
+                requireView().findViewById<View>(R.id.comicFrameMoreComics).visibility = View.GONE
+                recycler.visibility = View.GONE
+                requireView().findViewById<View>(R.id.emptyview).visibility = View.VISIBLE
+            } else {
+                requireView().findViewById<View>(R.id.comicFrameMoreComics).visibility = View.VISIBLE
+                recycler.visibility = View.VISIBLE
+                requireView().findViewById<View>(R.id.emptyview).visibility = View.GONE
+
+            }
+
+        }
+        BottomSheetBehavior.from(view?.findViewById(R.id.bottom_sheet)!!).apply {
+            peekHeight = 100
+            this.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
         val buttonMoreComics = requireView().findViewById<Button>(R.id.buttonMoreComics)
         buttonMoreComics.setOnClickListener {
             val fragment = MoreComicsFragment()
@@ -84,6 +95,7 @@ class CharacterDetailsFragment : Fragment(), onComicItemClickListener {
             transaction.commit()
         }
     }
+
       override fun onPause() {
             super.onPause()
             viewModel.characters.removeObservers(this)

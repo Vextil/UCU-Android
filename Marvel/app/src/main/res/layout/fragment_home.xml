@@ -48,14 +48,19 @@
                 android:textSize="20sp"
                 />
         </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewshadow"
+        >
         <ScrollView
         android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewshadow">
+            android:layout_height="match_parent"
+           >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -70,6 +75,16 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+        <TextView
+            android:id="@+id/emptyview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="No Data Found"
+            android:visibility="gone"
+            />
+
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
