@@ -75,14 +75,16 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-        <TextView
-            android:id="@+id/emptyview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="No Data Found"
-            android:visibility="gone"
-            />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:lottie_rawRes="@raw/notfound"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:visibility="gone"/>
+
 
     </FrameLayout>
 

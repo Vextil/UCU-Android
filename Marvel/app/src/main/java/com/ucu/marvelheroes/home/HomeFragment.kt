@@ -11,6 +11,7 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.airbnb.lottie.LottieAnimationView
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
 import com.ucu.marvelheroes.details.CharacterDetailsFragment
@@ -51,10 +52,14 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
             adapter.update(it)
             if (it.isEmpty()) {
                 recycler.visibility = View.GONE
-                requireView().findViewById<View>(R.id.emptyview).visibility = View.VISIBLE
+                val animation = requireView().findViewById<LottieAnimationView>(R.id.animation_view)
+                animation.playAnimation()
+                animation.visibility = View.VISIBLE
             } else {
                 recycler.visibility = View.VISIBLE
-                requireView().findViewById<View>(R.id.emptyview).visibility = View.GONE
+                val animation = requireView().findViewById<LottieAnimationView>(R.id.animation_view)
+                animation.pauseAnimation()
+                animation.visibility = View.GONE
             }
 
         }
