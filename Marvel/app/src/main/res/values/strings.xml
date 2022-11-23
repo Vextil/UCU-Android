@@ -18,5 +18,6 @@
     <string name="pages">Pages</string>
     <string name="no_description">No description</string>
     <string name="comic_details">Comic details</string>
+    <string name="hero_details">Hero details</string>
     <string name="comic_id">ID: %1$s</string>
 </resources>

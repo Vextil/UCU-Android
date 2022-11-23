@@ -1,48 +1,40 @@
 package com.ucu.marvelheroes.details
 
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.*
+import coil.load
+import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
 import com.ucu.marvelheroes.data.domain.model.MarvelComic
 import com.ucu.marvelheroes.data.source.repositories.CharactersRepository
 import kotlinx.coroutines.launch
 
-class CharacterDetailViewModel(private val charactersRepository: CharactersRepository): ViewModel() {
+class CharacterDetailViewModel(private val charactersRepository: CharactersRepository) :
+    ViewModel() {
+
     var loading = MutableLiveData(false)
-    var search = MutableLiveData(0)
-    var offset = 0
-    private val _characters = MutableLiveData<List<MarvelComic>>()
-    val characters: LiveData<List<MarvelComic>>
-        get() = _characters
+    val character = MutableLiveData<MarvelCharacter>()
+
+    val comics = MutableLiveData<List<MarvelComic>>()
 
 
-    fun load(query: Int) {
+    fun loadComics() {
         viewModelScope.launch {
-            if (loading.value == true) return@launch
+            val characterId = character.value?.id?.toInt()
+            if (loading.value == true || characterId == null) return@launch
             loading.value = true
-            val characters = charactersRepository.fetchComics(query, 0)
-            _characters.value = characters
+            comics.value = charactersRepository.fetchComics(characterId, 0)
             loading.value = false
         }
     }
 
-    fun loadMore() {
-        viewModelScope.launch {
-            if (loading.value == true) return@launch
-            loading.value = true
-            offset += 20
-            val characters = search.value?.let { charactersRepository.fetchComics(it, offset) }
-            _characters.value = _characters.value?.plus(characters!!)
-            loading.value = false
+    companion object {
+
+        @JvmStatic
+        @BindingAdapter("imageUrl")
+        fun loadImage(view: ImageView, url: String?) {
+            view.load(url ?: "")
         }
     }
-
-    fun refreshComics(query: Int){
-            viewModelScope.launch {
-                charactersRepository.fetchComics(query).run {
-                    _characters.postValue(this)
-                }
-            }
-    }
-
-
 
 }

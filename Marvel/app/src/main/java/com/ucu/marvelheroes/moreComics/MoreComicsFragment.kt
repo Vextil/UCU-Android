@@ -26,10 +26,14 @@ class MoreComicsFragment : Fragment(), onComicItemClickListener {
     private lateinit var layoutManager: StaggeredGridLayoutManager
     private val viewModel: MoreComicsViewModel by viewModel()
 
+    companion object {
+        const val ARG_CHARACTER_ID = "characterId"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            characterId = it.getString("characterId") ?: ""
+            characterId = it.getString(ARG_CHARACTER_ID) ?: ""
         }
     }
     override fun onCreateView(
@@ -91,27 +95,5 @@ class MoreComicsFragment : Fragment(), onComicItemClickListener {
 //        transaction.addToBackStack(null)
 //        transaction.commit()
     }
-
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ReviewFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MoreComicsFragment().apply {
-                arguments = Bundle().apply {
-
-                }
-            }
-    }
-
-
 
 }

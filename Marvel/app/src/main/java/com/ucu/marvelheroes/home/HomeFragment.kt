@@ -84,13 +84,11 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
     }
 
     override fun onItemClick(item: MarvelCharacter, position: Int) {
-        val detailsFragment = CharacterDetailsFragment()
-        val bundle = Bundle()
-        bundle.putString("characterId", item.id)
-        bundle.putString("characterName", item.name)
-        bundle.putString("characterDescription", item.description)
-        bundle.putString("characterImage", item.thumbnailUrl)
-        detailsFragment.arguments = bundle
+        val detailsFragment = CharacterDetailsFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(CharacterDetailsFragment.ARG_CHARACTER, item)
+            }
+        }
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.home_layout, detailsFragment)
         transaction.addToBackStack(null)
