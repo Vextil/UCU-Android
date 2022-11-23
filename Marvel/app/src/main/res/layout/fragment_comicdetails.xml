@@ -119,7 +119,7 @@
             app:layout_constraintStart_toStartOf="@id/guide_start"
             app:layout_constraintTop_toBottomOf="@id/comicId"
             app:pages="@{viewModel.comic.pageCount}"
-            app:issueNumber="@{viewModel.comic.pageCount}"/>
+            app:issueNumber="@{viewModel.comic.issueNumber}"/>
 
 
         <ScrollView
