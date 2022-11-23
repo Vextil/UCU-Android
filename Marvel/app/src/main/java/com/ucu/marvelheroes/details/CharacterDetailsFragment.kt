@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.comicdetails.ComicDetailsFragment
 import com.ucu.marvelheroes.data.domain.model.MarvelComic
+import com.ucu.marvelheroes.moreComics.MoreComicsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CharacterDetailsFragment : Fragment(), onComicItemClickListener {
@@ -69,6 +71,18 @@ class CharacterDetailsFragment : Fragment(), onComicItemClickListener {
 
         characterImage.load(url)
         viewModel.refreshComics(characterId.toInt())
+        // get buttonMoreComics
+        val buttonMoreComics = requireView().findViewById<Button>(R.id.buttonMoreComics)
+        buttonMoreComics.setOnClickListener {
+            val fragment = MoreComicsFragment()
+            val bundle = Bundle()
+            bundle.putString("characterId", characterId)
+            fragment.arguments = bundle
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.home_layout, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
     }
       override fun onPause() {
             super.onPause()

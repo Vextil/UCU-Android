@@ -6,4 +6,5 @@ import com.ucu.marvelheroes.data.domain.model.MarvelComic
 interface ICharactersRepository {
     suspend fun fetchCharacters(query: String?, offset: Int): List<MarvelCharacter>
     suspend fun fetchComics(characterId: Int): List<MarvelComic>
+    suspend fun fetchComics(characterId: Int, offset: Int): List<MarvelComic>
 }

@@ -58,6 +58,7 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
                     override fun run() {
                         adapter.clear()
                         viewModel.load(s.toString())
+
                     }
                 }, 500)
             }

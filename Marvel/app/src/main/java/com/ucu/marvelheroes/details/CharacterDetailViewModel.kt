@@ -19,4 +19,6 @@ class CharacterDetailViewModel(private val charactersRepository: CharactersRepos
             }
     }
 
+
+
 }

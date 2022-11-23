@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+
+    >
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/MyCardView"
+        android:id="@+id/card"
+        android:background="@drawable/input_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/__c_gray_900"
+        >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/comicImage"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:strokeColor="@color/__c_gray_900"
+
+                tools:srcCompat="@tools:sample/avatars"
+
+                />
+        <TextView
+            android:id="@+id/comicName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/card"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            tools:text="Name"
+            />
+        </LinearLayout>
+            <TextView
+                android:id="@+id/comicIssueNumber"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:background="@drawable/input_background"
+                android:gravity="center"
+                android:layout_gravity="top|end"
+                android:paddingEnd="5dp"
+                android:paddingBottom="5dp"
+
+                android:layout_margin="10dp"
+
+
+                tools:text="Name"
+                />
+        </FrameLayout>
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</RelativeLayout>

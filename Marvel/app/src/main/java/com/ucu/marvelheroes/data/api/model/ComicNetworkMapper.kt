@@ -8,7 +8,6 @@ import com.ucu.marvelheroes.data.domain.util.EntityMapper
 object ComicNetworkMapper: EntityMapper<Result, MarvelComic> {
 
     override fun mapFromEntity(entity: Result): MarvelComic {
-        Log.v("UNO",entity.toString())
         return MarvelComic(
             id = entity.id,
             title = entity.title,

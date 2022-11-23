@@ -24,7 +24,8 @@ interface ApiService {
         @Query("orderBy") orderBy: String,
         @Query("ts") ts: String,
         @Query("hash") hash: String,
-        @Query("limit") limit: Int? = null
+        @Query("limit") limit: Int? = null,
+        @Query("offset") offset: Int? = null
 
 
 

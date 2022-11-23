@@ -55,4 +55,20 @@ class CharactersRepository(private val marvelService: ApiService) : ICharactersR
         Log.v("comics", comics.toString())
         return ComicNetworkMapper.fromGetCharactersResponse(comics)
     }
+
+    override suspend fun fetchComics(characterId: Int,offset: Int): List<MarvelComic> {
+        val timeStamp = Date().time.toString()
+        val comics = marvelService
+            .getComics(
+                characterId = characterId,
+                apiKey = BuildConfig.PUBLIC_KEY,
+                orderBy = "title",
+                ts = timeStamp,
+                hash = "$timeStamp${BuildConfig.PRIVATE_KEY}${BuildConfig.PUBLIC_KEY}".md5()
+                    .toHex(),
+                offset = offset
+            )
+        Log.v("comics", comics.toString())
+        return ComicNetworkMapper.fromGetCharactersResponse(comics)
+    }
 }
