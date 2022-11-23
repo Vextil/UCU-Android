@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/pill_background"
+    android:paddingStart="25dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="25dp"
+    android:paddingBottom="5dp">
+
+    <TextView
+        android:id="@+id/pages_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="@string/pages"
+        app:layout_constraintEnd_toStartOf="@id/issue_number_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/issue_number_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/issue_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/pages_title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/pages"
+        style="@style/bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/pages_title"
+        app:layout_constraintStart_toStartOf="@id/pages_title"
+        app:layout_constraintTop_toBottomOf="@id/pages_title"
+        tools:text="102" />
+
+    <TextView
+        android:id="@+id/issue_number"
+        style="@style/bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/issue_number_title"
+        app:layout_constraintStart_toStartOf="@id/issue_number_title"
+        app:layout_constraintTop_toBottomOf="@id/issue_number_title"
+        tools:text="#10" />
+
+    <View
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/pages_title"
+        app:layout_constraintStart_toEndOf="@id/issue_number_title"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

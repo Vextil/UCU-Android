@@ -14,5 +14,9 @@
     <string name="password_invalid">Password is not valid (min length: 6)</string>
     <string name="login_failed">Login failed, email or password is incorrect or user does not exist.</string>
     <string name="user_already_exists">A user with that email already exists, try logging in.</string>
-    <string name="issue_number">Issue: %1$s</string>
+    <string name="issue_number">Issue</string>
+    <string name="pages">Pages</string>
+    <string name="no_description">No description</string>
+    <string name="comic_details">Comic details</string>
+    <string name="comic_id">ID: %1$s</string>
 </resources>

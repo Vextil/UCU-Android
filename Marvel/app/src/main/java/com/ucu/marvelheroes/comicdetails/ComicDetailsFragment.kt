@@ -29,8 +29,6 @@ class ComicDetailsFragment : Fragment() {
             } else {
                 it.getParcelable(ARG_COMIC)
             }
-
-            Log.e("ComicDetailsFragment", "comic: ${viewModel.comic.value}")
         }
     }
 

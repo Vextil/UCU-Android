@@ -9,5 +9,6 @@ data class MarvelComic(
     val title: String,
     val description: String?,
     val issueNumber: Double,
-    val thumbnailUrl: String?
+    val thumbnailUrl: String?,
+    val pageCount: Int,
 ): Parcelable

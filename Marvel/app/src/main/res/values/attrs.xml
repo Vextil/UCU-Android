@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HeaderView">
+        <attr name="text" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="InfoPill">
+        <attr name="pages" format="integer" />
+        <attr name="issueNumber" format="float" />
+    </declare-styleable>
+</resources>
