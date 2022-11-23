@@ -40,7 +40,9 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
         adapter = CharacterAdapter(viewModel.characters.value ?: emptyList(), this)
         recycler.adapter = adapter
         recycler.addOnScrollListener(OnScrollListener(viewModel, layoutManager))
-        viewModel.load(null)
+        if (viewModel.characters.value.isNullOrEmpty()) {
+            viewModel.load(null)
+        }
         viewModel.characters.observe(viewLifecycleOwner) {
             adapter.update(it)
         }

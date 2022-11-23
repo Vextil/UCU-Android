@@ -17,6 +17,14 @@ class CharacterAdapter(
 
     private val items = MutableList(initialItems.size) { initialItems[it] }
 
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return items[position].id.toLong()
+    }
+
     override fun getItemCount(): Int {
         return items.size
     }
