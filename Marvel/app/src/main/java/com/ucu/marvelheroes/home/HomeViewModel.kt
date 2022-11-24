@@ -8,8 +8,9 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val charactersRepository: CharactersRepository) : ViewModel() {
 
     var offset = 0
-    var loading = MutableLiveData(false)
-    var search = MutableLiveData("")
+    val loading = MutableLiveData(false)
+    val notFound = MutableLiveData(false)
+    val search = MutableLiveData("")
 
     private val _characters = MutableLiveData(listOf<MarvelCharacter>())
     val characters: LiveData<List<MarvelCharacter>>
@@ -18,10 +19,14 @@ class HomeViewModel(private val charactersRepository: CharactersRepository) : Vi
     fun load(query: String?) {
         viewModelScope.launch {
             if (loading.value == true) return@launch
+            notFound.value = false
             loading.value = true
             search.value = query
             val characters = charactersRepository.fetchCharacters(search.value, 0)
             _characters.value = characters
+            if (characters.isEmpty()) {
+                notFound.value = true
+            }
             loading.value = false
         }
     }

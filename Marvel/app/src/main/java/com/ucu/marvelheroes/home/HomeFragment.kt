@@ -7,12 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.airbnb.lottie.LottieAnimationView
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
+import com.ucu.marvelheroes.databinding.FragmentComicdetailsBinding
+import com.ucu.marvelheroes.databinding.FragmentHomeBinding
 import com.ucu.marvelheroes.details.CharacterDetailsFragment
 import java.util.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,7 +33,17 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_home, container, false)
+    ): View {
+        val binding = DataBindingUtil.inflate<FragmentHomeBinding>(
+            inflater,
+            R.layout.fragment_home,
+            container,
+            false
+        )
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,18 +62,6 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
         }
         viewModel.characters.observe(viewLifecycleOwner) {
             adapter.update(it)
-            if (it.isEmpty()) {
-                recycler.visibility = View.GONE
-                val animation = requireView().findViewById<LottieAnimationView>(R.id.animation_view)
-                animation.playAnimation()
-                animation.visibility = View.VISIBLE
-            } else {
-                recycler.visibility = View.VISIBLE
-                val animation = requireView().findViewById<LottieAnimationView>(R.id.animation_view)
-                animation.pauseAnimation()
-                animation.visibility = View.GONE
-            }
-
         }
         setSearchTextChangeListener()
 
