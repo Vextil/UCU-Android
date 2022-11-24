@@ -34,4 +34,8 @@ class HeaderView(context: Context, attrs: AttributeSet) : FrameLayout(context, a
         }
 
     }
+
+    public fun setText(text: String) {
+        this.text.text = text
+    }
 }
