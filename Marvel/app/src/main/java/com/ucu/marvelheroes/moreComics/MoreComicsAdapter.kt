@@ -63,9 +63,7 @@ class ComicViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
 
     fun initialize(item: MarvelComic, action: onComicItemClickListener){
         comicName.text = item.title
-
-        val url = item.thumbnailUrl?.replace("http", "https")
-        comicImage.load(url)
+        comicImage.load(item.thumbnailUrl)
         comicIssueNumber.text = item.issueNumber.toString()
 
 

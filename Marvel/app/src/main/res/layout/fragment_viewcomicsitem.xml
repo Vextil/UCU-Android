@@ -9,50 +9,52 @@
     >
 
     <com.google.android.material.card.MaterialCardView
-        style="@style/MyCardView"
         android:id="@+id/card"
-        android:background="@drawable/input_background"
+        style="@style/MyCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:strokeWidth="1dp"
+        android:background="@drawable/input_background"
         app:strokeColor="@color/__c_gray_900"
-        >
+        app:strokeWidth="2.3dp">
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/comicImage"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                app:strokeColor="@color/__c_gray_900"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                tools:srcCompat="@tools:sample/avatars"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/comicImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/rounded"
+                    android:layout_margin="10dp"
+                    app:strokeColor="@color/__c_gray_900"
+                    tools:srcCompat="@tools:sample/avatars" />
 
-                />
-        <TextView
-            android:id="@+id/comicName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/card"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:textSize="20sp"
-            tools:text="Name"
-            />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/comicName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/card"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    style="@style/bold"
+                    tools:text="Name" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/comicIssueNumber"
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="30dp"
                 android:background="@drawable/input_background"
                 android:gravity="center"
@@ -60,10 +62,12 @@
                 android:paddingEnd="5dp"
                 android:paddingBottom="5dp"
 
-                android:layout_margin="10dp"
+                android:layout_margin="20dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                style="@style/bold"
 
-
-                tools:text="Name"
+                tools:text=""
                 />
         </FrameLayout>
 
