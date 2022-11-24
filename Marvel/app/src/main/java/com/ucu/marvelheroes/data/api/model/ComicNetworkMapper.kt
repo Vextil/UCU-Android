@@ -1,7 +1,5 @@
 package com.ucu.marvelheroes.data.api.model
 
-import android.util.Log
-import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
 import com.ucu.marvelheroes.data.domain.model.MarvelComic
 import com.ucu.marvelheroes.data.domain.util.EntityMapper
 

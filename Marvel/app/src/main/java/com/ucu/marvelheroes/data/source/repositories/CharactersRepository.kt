@@ -1,6 +1,5 @@
 package com.ucu.marvelheroes.data.source.repositories
 
-import android.util.Log
 import com.ucu.marvelheroes.BuildConfig
 import com.ucu.marvelheroes.data.api.ApiService
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
@@ -52,7 +51,6 @@ class CharactersRepository(private val marvelService: ApiService) : ICharactersR
                     .toHex(),
                 limit = 10
             )
-        Log.v("comics", comics.toString())
         return ComicNetworkMapper.fromGetCharactersResponse(comics)
     }
 
@@ -68,7 +66,6 @@ class CharactersRepository(private val marvelService: ApiService) : ICharactersR
                     .toHex(),
                 offset = offset
             )
-        Log.v("comics", comics.toString())
         return ComicNetworkMapper.fromGetCharactersResponse(comics)
     }
 }

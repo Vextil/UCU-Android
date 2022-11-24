@@ -3,7 +3,6 @@ package com.ucu.marvelheroes.home
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -117,7 +116,6 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
                 && firstVisibleItemPosition >= 0
                 && totalItemCount >= 20
             ) {
-                Log.v("...", " Reached Last Item")
                 viewModel.loadMore()
             }
         }
