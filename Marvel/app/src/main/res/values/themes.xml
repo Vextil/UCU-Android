@@ -18,10 +18,10 @@
 
     <style name="ShapeAppearanceOverlay.MaterialCardView.Cut" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopRight">20dp</item>
-        <item name="cornerSizeTopLeft">20dp</item>
-        <item name="cornerSizeBottomRight">20dp</item>
-        <item name="cornerSizeBottomLeft">20dp</item>
+        <item name="cornerSizeTopRight">15dp</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeBottomRight">15dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
     </style>
 
     <style name="Theme.MarvelHeroes.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -38,5 +38,9 @@
 
     <style name="bold">
         <item name="fontFamily">@font/satoshi_bold</item>
+    </style>
+
+    <style name="rounded">
+        <item name="cornerSize">8dp</item>
     </style>
 </resources>

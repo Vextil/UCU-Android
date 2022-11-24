@@ -23,4 +23,5 @@
     <string name="comics_title">COMICS</string>
     <string name="no_comics">No comics available</string>
     <string name="comics_with">Comics with "%1$s"</string>
+    <string name="search">Search Characters</string>
 </resources>
