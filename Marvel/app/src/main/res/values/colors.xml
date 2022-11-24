@@ -7,15 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="marvel_red">#ED1D24</color>
+    <color name="marvel_red_dark">#BD191F</color>
+    <color name="bg">#1d1d1d</color>
+    <color name="bg_dark">#171717</color>
 
-    <color name="error_red">#FFC5032B</color>
-
-
+    <color name="error_red">#9A161A</color>
 
     <color name = "__c_gray_100"> #fbf8f2</color>
     <color name = "__c_gray_200"> #fcfdfe</color>
     <color name = "__c_gray_300"> #e9ebec</color>
     <color name = "__c_gray_400"> #e3e4ea</color>
+    <color name = "__c_gray_450">#BABBBF</color>
     <color name = "__c_gray_500"> #5f5f5f</color>
     <color name = "__c_gray_900"> #1d1d1d</color>
     <color name = "__c_blue_300"> #a8dee2</color>

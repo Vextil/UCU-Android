@@ -20,4 +20,7 @@
     <string name="comic_details">Comic details</string>
     <string name="hero_details">Hero details</string>
     <string name="comic_id">ID: %1$s</string>
+    <string name="comics_title">COMICS</string>
+    <string name="no_comics">No comics available</string>
+    <string name="comics_with">Comics with "%1$s"</string>
 </resources>

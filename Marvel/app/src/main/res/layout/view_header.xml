@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@{viewModel.text}"
-        android:textColor="@color/__c_gray_900"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/backButton"
         app:layout_constraintEnd_toEndOf="parent"

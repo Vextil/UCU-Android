@@ -16,7 +16,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/__c_gray_100">
+        android:background="@color/bg">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_start"
@@ -125,6 +125,7 @@
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="@id/guide_end"
             app:layout_constraintStart_toStartOf="@id/guide_start"
             app:layout_constraintTop_toBottomOf="@id/comicInfo"
@@ -134,8 +135,7 @@
                 android:id="@+id/comicDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:paddingBottom="20dp"
+                android:paddingBottom="40dp"
                 android:text="@{TextUtils.isEmpty(viewModel.comic.description) ? @string/no_description : viewModel.comic.description}"
                 android:textAlignment="@{TextUtils.isEmpty(viewModel.comic.description) ? View.TEXT_ALIGNMENT_CENTER : View.TEXT_ALIGNMENT_TEXT_START}"
                 android:textSize="19sp"

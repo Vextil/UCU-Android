@@ -28,14 +28,11 @@ class CharacterDetailsFragment : Fragment(), OnComicItemClickListener {
 
     private lateinit var adapter: ComicAdapter
     private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<RelativeLayout>
     private val viewModel: CharacterDetailViewModel by viewModel()
 
-    private val frameMoreComics: FrameLayout
-        get() = requireView().findViewById(R.id.comicFrameMoreComics)
     private val buttonMoreComics: Button
         get() = requireView().findViewById(R.id.buttonMoreComics)
-    private val noComicsView: TextView
-        get() = requireView().findViewById(R.id.emptyview)
     private val recycler: RecyclerView
         get() = requireView().findViewById(R.id.recycler)
     private val bottomSheet: RelativeLayout
@@ -82,37 +79,12 @@ class CharacterDetailsFragment : Fragment(), OnComicItemClickListener {
         }
         viewModel.comics.observe(viewLifecycleOwner) {
             adapter.update(it)
-            if (it.isEmpty()) {
-                frameMoreComics.visibility = View.GONE
-                recycler.visibility = View.GONE
-                noComicsView.visibility = View.VISIBLE
-            } else {
-                frameMoreComics.visibility = View.VISIBLE
-                recycler.visibility = View.VISIBLE
-                noComicsView.visibility = View.GONE
-            }
         }
-        BottomSheetBehavior.from(bottomSheet).apply {
-            val r: Resources = view.context.resources
-            val px = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                50f,
-                r.displayMetrics
-            )
-            peekHeight = px.toInt()
-            this.state = BottomSheetBehavior.STATE_COLLAPSED
+        buttonMoreComics.setOnClickListener { openMoreComics() }
+        bottomSheet.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
-        buttonMoreComics.setOnClickListener {
-            val fragment = MoreComicsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(MoreComicsFragment.ARG_CHARACTER_ID, viewModel.character.value?.id)
-                }
-            }
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.home_layout, fragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
-        }
+        initBottomSheet()
     }
 
     override fun onItemClick(item: MarvelComic, position: Int) {
@@ -122,6 +94,24 @@ class CharacterDetailsFragment : Fragment(), OnComicItemClickListener {
         }
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(R.id.home_layout, detailsFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun initBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet).apply {
+            this.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    private fun openMoreComics() {
+        val fragment = MoreComicsFragment().apply {
+            arguments = Bundle().apply {
+                putString(MoreComicsFragment.ARG_CHARACTER_ID, viewModel.character.value?.id)
+            }
+        }
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.home_layout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
