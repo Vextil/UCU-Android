@@ -94,13 +94,14 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animation_view"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:visibility="@{viewModel.notFound ? View.VISIBLE : View.GONE}"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
-                app:lottie_rawRes="@raw/notfound" />
+                app:lottie_rawRes="@raw/notfound"
+               />
 
             <ProgressBar
                 android:layout_width="40dp"
