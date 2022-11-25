@@ -23,7 +23,7 @@ class CharacterDetailViewModel(private val charactersRepository: CharactersRepos
             val characterId = character.value?.id?.toInt()
             if (loading.value == true || characterId == null) return@launch
             loading.value = true
-            comics.value = charactersRepository.fetchComics(characterId, 0)
+            comics.value = charactersRepository.fetchComics(characterId)
             loading.value = false
         }
     }

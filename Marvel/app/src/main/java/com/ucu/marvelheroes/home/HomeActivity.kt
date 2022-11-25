@@ -20,4 +20,12 @@ class HomeActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.home_layout, fragment)
         fragmentTransaction.commit()
     }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 1) {
+            supportFragmentManager.popBackStack()
+        } else {
+            finish()
+        }
+    }
 }
