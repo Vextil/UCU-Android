@@ -6,5 +6,6 @@ interface IAuthRepository {
     suspend fun login(email: String, password: String): Boolean
     suspend fun register(email: String, password: String): Boolean
     suspend fun googleLogin(account: GoogleSignInAccount): Boolean
+    fun logout()
     fun isLoggedIn(): Boolean
 }

@@ -201,6 +201,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/no_comics"
+                        android:paddingBottom="20dp"
                         android:textSize="20sp"
                         android:visibility="@{viewModel.comics.isEmpty() ? View.VISIBLE : View.GONE}" />
 

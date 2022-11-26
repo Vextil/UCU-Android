@@ -1,5 +1,6 @@
 package com.ucu.marvelheroes.home
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -14,11 +15,9 @@ import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
 
 
 class CharacterAdapter(
-    private val initialItems: List<MarvelCharacter>,
+    private var items: MutableList<MarvelCharacter>,
     private var clickListener: OnCharacterItemClickListener
 ) : RecyclerView.Adapter<CharacterViewHolder>() {
-
-    private val items = MutableList(initialItems.size) { initialItems[it] }
 
     init {
         setHasStableIds(true)
@@ -47,16 +46,15 @@ class CharacterAdapter(
         notifyItemRangeRemoved(0, size)
     }
 
-    fun update(newItems: List<MarvelCharacter>) {
+    @SuppressLint("NotifyDataSetChanged")
+    fun update(newItems: MutableList<MarvelCharacter>) {
         val oldSize = items.size
         val newSize = newItems.size
-        if (newSize > oldSize) {
-            items.addAll(newItems.subList(oldSize, newSize))
+        if (newItems == items) {
             notifyItemRangeInserted(oldSize, newSize - oldSize)
         } else {
-            items.clear()
-            items.addAll(newItems)
-            notifyItemRangeRemoved(newSize, oldSize - newSize)
+            items = newItems.toMutableList()
+            notifyDataSetChanged()
         }
     }
 

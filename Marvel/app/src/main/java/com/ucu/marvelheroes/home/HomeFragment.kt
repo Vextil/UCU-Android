@@ -1,34 +1,33 @@
 package com.ucu.marvelheroes.home
 
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
+import android.widget.Button
+import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.airbnb.lottie.LottieAnimationView
 import com.ucu.marvelheroes.R
+import com.ucu.marvelheroes.auth.AuthActivity
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
-import com.ucu.marvelheroes.databinding.FragmentComicdetailsBinding
+import com.ucu.marvelheroes.data.source.interfaces.IAuthRepository
 import com.ucu.marvelheroes.databinding.FragmentHomeBinding
 import com.ucu.marvelheroes.details.CharacterDetailsFragment
-import java.util.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class HomeFragment : Fragment(), OnCharacterItemClickListener {
 
-    private var timer = Timer()
     private lateinit var adapter: CharacterAdapter
     private lateinit var layoutManager: StaggeredGridLayoutManager
     private val viewModel: HomeViewModel by viewModel()
-
-    private var previousSearch = ""
+    private val authRepository: IAuthRepository by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,40 +51,19 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
         layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
         recycler.setHasFixedSize(true)
         recycler.layoutManager = layoutManager
-        adapter = CharacterAdapter(viewModel.characters.value ?: emptyList(), this)
-        adapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        adapter = CharacterAdapter(viewModel.characters.value ?: mutableListOf(), this)
         recycler.adapter = adapter
         recycler.addOnScrollListener(OnScrollListener(viewModel, layoutManager))
+        val optionsButton = requireView().findViewById<Button>(R.id.optionsButton)
+        optionsButton.setOnClickListener {
+            showPopup(it)
+        }
         if (viewModel.characters.value.isNullOrEmpty()) {
             viewModel.load(null)
         }
         viewModel.characters.observe(viewLifecycleOwner) {
             adapter.update(it)
         }
-        setSearchTextChangeListener()
-
-    }
-
-    private fun setSearchTextChangeListener() {
-        val charactersearch = requireView().findViewById<EditText>(R.id.charactersearch)
-        charactersearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                timer.cancel()
-                if (s.toString() != previousSearch) {
-                    timer = Timer()
-                    timer.schedule(object : TimerTask() {
-                        override fun run() {
-                            viewModel.load(s.toString())
-                        }
-                    }, 500)
-                    previousSearch = s.toString()
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
     }
 
     override fun onItemClick(item: MarvelCharacter, position: Int) {
@@ -98,6 +76,30 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
         transaction.replace(R.id.home_layout, detailsFragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    fun showPopup(v: View) {
+        val popupMenu = PopupMenu(v.context, v)
+        val inflater = popupMenu.menuInflater
+        inflater.inflate(R.menu.menu, popupMenu.menu)
+        popupMenu.show()
+
+        popupMenu.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.logout -> {
+                    authRepository.logout()
+                    goToLogin()
+                }
+            }
+            true
+        }
+    }
+
+    fun goToLogin() {
+        val i = Intent(context, AuthActivity::class.java)
+        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(i)
+        activity?.finish()
     }
 
     class OnScrollListener(

@@ -5,10 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.ucu.marvelheroes.data.source.interfaces.IAuthRepository
 import com.ucu.marvelheroes.data.source.repositories.AuthRepository
 import kotlinx.coroutines.launch
 
-class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class AuthViewModel(private val authRepository: IAuthRepository) : ViewModel() {
 
     val email = MutableLiveData("")
     val password = MutableLiveData("")

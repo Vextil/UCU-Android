@@ -37,6 +37,10 @@ class AuthRepository(private val firebaseAuth: FirebaseAuth) : IAuthRepository {
         }
     }
 
+    override fun logout() {
+        firebaseAuth.signOut()
+    }
+
     override fun isLoggedIn(): Boolean {
         return firebaseAuth.currentUser != null
     }

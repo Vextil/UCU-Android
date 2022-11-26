@@ -29,7 +29,7 @@
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/comicImage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="230dp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     app:shapeAppearanceOverlay="@style/rounded"
