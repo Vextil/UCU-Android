@@ -8,32 +8,37 @@ import kotlinx.coroutines.launch
 
 class MoreComicsViewModel(private val charactersRepository: CharactersRepository) : ViewModel() {
     var offset = 0
-    var loading = MutableLiveData(false)
-    var search = MutableLiveData(0)
+    val loading = MutableLiveData(false)
+    var showShimmer = MutableLiveData<Boolean>(true)
+    var loadingMore = false
 
-    private val _characters = MutableLiveData(listOf<MarvelComic>())
-    val characters: LiveData<List<MarvelComic>>
-        get() = _characters
+    private val _comics = MutableLiveData(listOf<MarvelComic>())
+    val comics: LiveData<List<MarvelComic>>
+        get() = _comics
 
     fun load(query: Int) {
         viewModelScope.launch {
             if (loading.value == true) return@launch
             loading.value = true
-            search.value = query
-            val characters = charactersRepository.fetchComics(query)
-            _characters.value = characters
+            showShimmer.value = true
+            val comics = charactersRepository.fetchComics(query)
+            _comics.value = comics
+            showShimmer.value = comics.isNotEmpty()
             loading.value = false
         }
     }
 
     fun loadMore(query: Int) {
         viewModelScope.launch {
-            if (loading.value == true) return@launch
+            if (loadingMore) return@launch
+            loadingMore = true
             loading.value = true
             offset += 10
-            val characters = charactersRepository.fetchComics(query, offset)
-            _characters.value = _characters.value?.plus(characters)
+            val comics = charactersRepository.fetchComics(query, offset)
+            showShimmer.value = comics.isNotEmpty()
+            _comics.value = _comics.value?.plus(comics)
             loading.value = false
+            loadingMore = false
         }
     }
 

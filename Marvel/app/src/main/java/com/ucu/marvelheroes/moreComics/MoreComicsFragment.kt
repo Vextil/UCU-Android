@@ -42,7 +42,7 @@ class MoreComicsFragment : Fragment(), onComicItemClickListener {
         layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
         recycler.setHasFixedSize(true)
         recycler.layoutManager = layoutManager
-        adapter = MoreComicsAdapter(listOf(), this)
+        adapter = MoreComicsAdapter(viewModel.comics.value ?: listOf(), this)
         recycler.adapter = adapter
         recycler.addOnScrollListener(
             MoreComicsFragment.OnScrollListener(
@@ -51,9 +51,18 @@ class MoreComicsFragment : Fragment(), onComicItemClickListener {
                 characterId
             )
         )
-        viewModel.load(characterId.toInt())
-        viewModel.characters.observe(viewLifecycleOwner) {
-            adapter.update(it)
+        if (viewModel.comics.value.isNullOrEmpty()) {
+            viewModel.load(characterId.toInt())
+        }
+        viewModel.comics.observe(viewLifecycleOwner) {
+            adapter.add(it)
+        }
+        viewModel.showShimmer.observe(viewLifecycleOwner) {
+            if (it) {
+                adapter.enableShimmer()
+            } else {
+                adapter.disableShimmer()
+            }
         }
         val header = requireView().findViewById<HeaderView>(R.id.header)
         header.setText(resources.getString(R.string.more_comics))
@@ -78,6 +87,8 @@ class MoreComicsFragment : Fragment(), onComicItemClickListener {
                 && totalItemCount >= 10
             ) {
                 viewModel.loadMore(characterId.toInt())
+            } else if (totalItemCount in 7..9) {
+                viewModel.showShimmer.value = false
             }
         }
     }

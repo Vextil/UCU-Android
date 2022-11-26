@@ -62,12 +62,6 @@ class CharacterAdapter(
         else -> throw IllegalArgumentException("Unknown view holder")
     }
 
-    fun clear() {
-        val size = items.size
-        items.clear()
-        notifyItemRangeRemoved(0, size)
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     fun update(newItems: List<MarvelCharacter>, reset: Boolean) {
         if (reset) {

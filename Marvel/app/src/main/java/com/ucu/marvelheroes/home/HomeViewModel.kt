@@ -17,7 +17,6 @@ class HomeViewModel(
     val notFound = MutableLiveData(false)
     val showShimmer = MutableLiveData(true)
     val search = MutableLiveData("")
-    val popupVisible = MutableLiveData(false)
     val characters: MutableLiveData<HomeCharactersState> = MutableLiveData()
 
     private var timer: Timer = Timer()
@@ -80,10 +79,6 @@ class HomeViewModel(
                 load(text.toString())
             }
         }, 500)
-    }
-
-    fun showPopup(view: View) {
-        popupVisible.value = true
     }
 
     data class HomeCharactersState(
