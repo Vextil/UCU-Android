@@ -24,7 +24,7 @@ class AuthActivity : AppCompatActivity() {
 
     private var googleSignInResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.data != null) {
                 val signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(result.data!!)
                 if (signInResult?.isSuccess == true) {
                     viewModel.setGoogleAccount(signInResult.signInAccount!!)
