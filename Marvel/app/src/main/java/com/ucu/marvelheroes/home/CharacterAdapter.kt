@@ -12,32 +12,54 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
+import kotlin.math.max
 
 
 class CharacterAdapter(
-    private var items: MutableList<MarvelCharacter>,
+    private var initialItems: List<MarvelCharacter>,
     private var clickListener: OnCharacterItemClickListener
-) : RecyclerView.Adapter<CharacterViewHolder>() {
+) : RecyclerView.Adapter<BaseCharacterViewHolder>() {
+
+    var shimmerCount = 6;
+    var items = initialItems.toMutableList()
 
     init {
         setHasStableIds(true)
     }
 
     override fun getItemId(position: Int): Long {
-        return items[position].id.toLong()
+        if (position < items.size) {
+            return items[position].id.toLong()
+        }
+        return super.getItemId(position)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (position < items.size) {
+            return 0
+        }
+        return 1
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return items.size + shimmerCount
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder =
-        CharacterViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.heroesitem, parent, false)
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseCharacterViewHolder =
+        if (viewType == 0) {
+            CharacterViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.heroesitem, parent, false)
+            )
+        } else {
+            CharacterShimmerViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.shimmer_item, parent, false)
+            )
+        }
 
-    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        holder.initialize(items[position], clickListener)
+    override fun onBindViewHolder(holder: BaseCharacterViewHolder, position: Int) = when (holder) {
+        is CharacterViewHolder -> holder.initialize(items[position], clickListener)
+        is CharacterShimmerViewHolder -> holder.initialize()
+        else -> throw IllegalArgumentException("Unknown view holder")
     }
 
     fun clear() {
@@ -47,20 +69,37 @@ class CharacterAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun update(newItems: MutableList<MarvelCharacter>) {
-        val oldSize = items.size
-        val newSize = newItems.size
-        if (newItems == items) {
-            notifyItemRangeInserted(oldSize, newSize - oldSize)
-        } else {
-            items = newItems.toMutableList()
+    fun update(newItems: List<MarvelCharacter>, reset: Boolean) {
+        if (reset) {
+            items.clear()
+            items.addAll(newItems)
             notifyDataSetChanged()
+        } else {
+            val oldSize = items.size
+            val newSize = newItems.size
+            items.addAll(newItems)
+            notifyItemRangeInserted(oldSize, newSize)
+        }
+    }
+
+    fun enableShimmer() {
+        if (shimmerCount == 0) {
+            shimmerCount = 6
+            notifyItemRangeInserted(items.size, shimmerCount)
+        }
+    }
+
+    fun disableShimmer() {
+        if (shimmerCount > 0) {
+            val oldShimmerCount = shimmerCount
+            shimmerCount = 0
+            notifyItemRangeRemoved(items.size, oldShimmerCount)
         }
     }
 
 }
 
-class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class CharacterViewHolder(itemView: View) : BaseCharacterViewHolder(itemView) {
     private var characterName = itemView.findViewById<TextView>(R.id.characterName)
     private var characterImage = itemView.findViewById<ImageView>(R.id.characterImage)
 
@@ -80,6 +119,14 @@ class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
 }
+
+class CharacterShimmerViewHolder(itemView: View) : BaseCharacterViewHolder(itemView) {
+    fun initialize() {
+    }
+
+}
+
+open class BaseCharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
 interface OnCharacterItemClickListener {
     fun onItemClick(item: MarvelCharacter, position: Int)

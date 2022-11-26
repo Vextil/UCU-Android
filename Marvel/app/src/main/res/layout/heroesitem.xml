@@ -11,7 +11,6 @@
         style="@style/MyCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/input_background"
         app:strokeColor="@color/__c_gray_900"
         app:strokeWidth="2.3dp">
 

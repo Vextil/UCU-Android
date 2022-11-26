@@ -1,11 +1,8 @@
 package com.ucu.marvelheroes.home
 
 import android.view.View
-import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.*
-import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
-import com.ucu.marvelheroes.data.source.repositories.AuthRepository
 import com.ucu.marvelheroes.data.source.repositories.CharactersRepository
 import kotlinx.coroutines.launch
 import java.util.*
@@ -18,24 +15,32 @@ class HomeViewModel(
     var loadingMore = false
     val loading = MutableLiveData(false)
     val notFound = MutableLiveData(false)
+    val showShimmer = MutableLiveData(true)
     val search = MutableLiveData("")
     val popupVisible = MutableLiveData(false)
+    val characters: MutableLiveData<HomeCharactersState> = MutableLiveData()
 
     private var timer: Timer = Timer()
 
-    private val _characters = MutableLiveData(mutableListOf<MarvelCharacter>())
-    val characters: LiveData<MutableList<MarvelCharacter>>
-        get() = _characters
 
     fun load(query: String?) {
         viewModelScope.launch {
             notFound.value = false
             loading.value = true
+            showShimmer.value = true
+            offset = 0
             search.value = query
-            val characters = charactersRepository.fetchCharacters(search.value, 0)
-            _characters.value = characters.toMutableList()
-            if (characters.isEmpty()) {
+            val newChars = charactersRepository.fetchCharacters(search.value, 0)
+            characters.value = HomeCharactersState(
+                newItems = newChars,
+                allItems = newChars,
+                newSearch = true
+            )
+            if (newChars.isEmpty()) {
                 notFound.value = true
+                showShimmer.value = false
+            } else {
+                showShimmer.value = true
             }
             loading.value = false
         }
@@ -47,16 +52,24 @@ class HomeViewModel(
             loadingMore = true
             loading.value = true
             offset += 20
-            val characters = charactersRepository.fetchCharacters(search.value, offset)
-            _characters.value?.addAll(characters)
-            _characters.value = _characters.value
+            val newChars = charactersRepository.fetchCharacters(search.value, offset)
+            if (newChars.isNotEmpty()) {
+                characters.value = HomeCharactersState(
+                    newItems = newChars,
+                    allItems = characters.value?.allItems?.plus(newChars) ?: newChars,
+                    newSearch = false
+                )
+            }
+            showShimmer.value = newChars.isNotEmpty()
             loading.value = false
             loadingMore = false
         }
     }
 
     fun clearSearch() {
+        characters.value = HomeCharactersState(listOf(), listOf(), true)
         search.value = ""
+        showShimmer.value = true
     }
 
     fun onSearchChanged(text: CharSequence) {
@@ -72,4 +85,10 @@ class HomeViewModel(
     fun showPopup(view: View) {
         popupVisible.value = true
     }
+
+    data class HomeCharactersState(
+        val newItems: List<MarvelCharacter>,
+        val allItems: List<MarvelCharacter>,
+        val newSearch: Boolean
+    )
 }

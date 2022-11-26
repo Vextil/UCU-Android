@@ -11,7 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.airbnb.lottie.LottieAnimationView
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.auth.AuthActivity
 import com.ucu.marvelheroes.data.domain.model.MarvelCharacter
@@ -51,18 +50,26 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
         layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
         recycler.setHasFixedSize(true)
         recycler.layoutManager = layoutManager
-        adapter = CharacterAdapter(viewModel.characters.value ?: mutableListOf(), this)
+        val restoredItems = viewModel.characters.value?.allItems ?: emptyList()
+        adapter = CharacterAdapter(restoredItems, this)
         recycler.adapter = adapter
         recycler.addOnScrollListener(OnScrollListener(viewModel, layoutManager))
         val optionsButton = requireView().findViewById<Button>(R.id.optionsButton)
         optionsButton.setOnClickListener {
             showPopup(it)
         }
-        if (viewModel.characters.value.isNullOrEmpty()) {
+        if (restoredItems.isEmpty()) {
             viewModel.load(null)
         }
         viewModel.characters.observe(viewLifecycleOwner) {
-            adapter.update(it)
+            adapter.update(it.newItems, it.newSearch)
+        }
+        viewModel.showShimmer.observe(viewLifecycleOwner) {
+            if (it) {
+                adapter.enableShimmer()
+            } else {
+                adapter.disableShimmer()
+            }
         }
     }
 
@@ -120,6 +127,8 @@ class HomeFragment : Fragment(), OnCharacterItemClickListener {
                 && totalItemCount >= 20
             ) {
                 viewModel.loadMore()
+            } else if (totalItemCount in 7..19) {
+                viewModel.showShimmer.value = false
             }
         }
     }
