@@ -3,6 +3,7 @@ package com.ucu.marvelheroes.auth
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -10,6 +11,7 @@ import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.button.MaterialButton
 import com.ucu.marvelheroes.R
 import com.ucu.marvelheroes.databinding.ActivityAuthBinding
 import com.ucu.marvelheroes.home.HomeActivity
@@ -60,6 +62,10 @@ class AuthActivity : AppCompatActivity() {
             if (it) {
                 openGoogleSignIn()
             }
+        }
+
+        findViewById<MaterialButton>(R.id.btn_ucu).setOnClickListener {
+            Toast.makeText(this, "Webaisngatura en mantenimiento hasta Diciembre del 2084, intente luego.", Toast.LENGTH_LONG).show()
         }
     }
 
